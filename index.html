@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Mauritius Holiday Companion App</title>
+    <meta name="theme-color" content="#0f766e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            touch-action: manipulation;
+            user-select: none;
+            background-color: #f1f5f9;
+        }
+        /* Mobile Safe Area Adjustments */
+        .pt-safe {
+            padding-top: max(0.75rem, env(safe-area-inset-top));
+        }
+        .pb-safe {
+            padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+        }
+        /* Hide scrollbars for slick mobile app look */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Active button feedback */
+        .btn-touch {
+            transition: transform 0.1s ease, opacity 0.15s ease;
+        }
+        .btn-touch:active {
+            transform: scale(0.96);
+            opacity: 0.88;
+        }
+        /* Prevent auto-zoom on iOS inputs */
+        input, select, textarea {
+            font-size: 16px !important;
+        }
+        /* Bottom Sheet Modal animation for mobile */
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .animate-slide-up {
+            animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen pb-28 selection:bg-teal-500 selection:text-white">
+
+    <!-- Mobile App Header -->
+    <header class="bg-gradient-to-r from-teal-900 via-teal-800 to-cyan-900 text-white sticky top-0 z-40 shadow-md pt-safe">
+        <div class="px-4 py-2.5 flex justify-between items-center max-w-2xl mx-auto">
+            <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center font-black text-xl shadow-md shrink-0 border border-amber-300">
+                    🇲🇺
+                </div>
+                <div>
+                    <h1 class="text-sm font-black tracking-tight leading-none text-white">Mauritius Trip</h1>
+                    <p class="text-[10px] text-teal-200 font-semibold mt-0.5">Oct 17 – Oct 25 • Family & 22m Toddler</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-1.5">
+                <div id="sync-status-badge" class="px-2 py-1 rounded-xl bg-teal-950/80 text-emerald-400 text-[10px] font-bold border border-emerald-500/30 flex items-center gap-1 shadow-xs">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span id="sync-status-text">Live Synced</span>
+                </div>
+                <button onclick="openSyncModal()" class="btn-touch px-2.5 py-1.5 rounded-xl bg-teal-700/80 hover:bg-teal-700 text-amber-300 text-[11px] font-bold border border-teal-500/40 flex items-center gap-1 shadow-sm">
+                    <i class="fa-solid fa-share-nodes text-xs"></i> Sync
+                </button>
+            </div>
+        </div>
+        
+        <!-- Quick Status Pills Bar -->
+        <div class="px-4 py-1.5 bg-teal-950/70 border-t border-teal-700/40 text-[10px] flex items-center justify-between overflow-x-auto hide-scrollbar gap-3 text-teal-200">
+            <span class="whitespace-nowrap font-medium flex items-center gap-1">
+                <i class="fa-solid fa-car text-amber-400"></i> Suzuki Swift + Toddler Seat (Ebrahim Tours)
+            </span>
+            <span class="whitespace-nowrap font-medium flex items-center gap-1 text-emerald-300">
+                <i class="fa-solid fa-shield-check"></i> Package Transfers Included
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-2xl mx-auto px-3 py-3 space-y-4">
+
+        <!-- VIEW 1: ITINERARY -->
+        <section id="view-itinerary" class="tab-content space-y-3">
+            
+            <!-- Dining Mode Bar -->
+            <div class="bg-gradient-to-r from-slate-900 to-teal-950 text-white p-3.5 rounded-2xl shadow-sm space-y-2">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <span class="text-[9px] uppercase font-black text-amber-400 tracking-wider">Dining Strategy</span>
+                        <h2 class="text-xs font-extrabold flex items-center gap-1 text-slate-100">
+                            Showing: <span id="current-mode-label" class="text-amber-300 font-bold">Indian Focus</span>
+                        </h2>
+                    </div>
+                    <div class="flex bg-slate-800/90 p-1 rounded-xl border border-slate-700/80">
+                        <button onclick="setItineraryMode('indian')" id="btn-mode-indian" class="btn-touch px-2.5 py-1 rounded-lg text-[10px] font-extrabold bg-amber-500 text-slate-950 shadow">
+                            🇮🇳 Indian
+                        </button>
+                        <button onclick="setItineraryMode('local')" id="btn-mode-local" class="btn-touch px-2.5 py-1 rounded-lg text-[10px] font-bold text-slate-300">
+                            🇲🇺 Local
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customizer Controls -->
+            <div class="flex justify-between items-center bg-white p-2.5 rounded-xl border border-slate-200 text-[11px] font-bold shadow-xs">
+                <span class="text-slate-600 flex items-center gap-1"><i class="fa-solid fa-sliders text-teal-600"></i> Daily Timeline</span>
+                <div class="flex gap-1.5">
+                    <button onclick="addCustomDay()" class="btn-touch px-2.5 py-1 rounded-lg bg-teal-700 text-white font-bold text-[10px] flex items-center gap-1">
+                        <i class="fa-solid fa-plus"></i> Add Day
+                    </button>
+                    <button onclick="resetItineraryToDefault()" class="btn-touch px-2 py-1 rounded-lg bg-slate-100 text-slate-600 font-semibold text-[10px]">
+                        <i class="fa-solid fa-rotate-left"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Resorts Stay Cards -->
+            <div class="grid grid-cols-2 gap-2 text-[10px]">
+                <div class="bg-amber-50/90 border border-amber-200/90 p-2.5 rounded-xl flex items-center gap-2">
+                    <div class="w-6 h-6 rounded-lg bg-amber-200 text-amber-900 flex items-center justify-center font-bold text-xs shrink-0">1</div>
+                    <div class="truncate">
+                        <div class="font-extrabold text-amber-950 truncate">Laguna Beach Hotel</div>
+                        <div class="text-slate-600 text-[9px]">Nights 1–4 • East Coast</div>
+                    </div>
+                </div>
+                <div class="bg-teal-50/90 border border-teal-200/90 p-2.5 rounded-xl flex items-center gap-2">
+                    <div class="w-6 h-6 rounded-lg bg-teal-200 text-teal-900 flex items-center justify-center font-bold text-xs shrink-0">2</div>
+                    <div class="truncate">
+                        <div class="font-extrabold text-teal-950 truncate">OUTRIGGER Resort</div>
+                        <div class="text-slate-600 text-[9px]">Nights 5–8 • South Coast</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Itinerary Timeline Stack -->
+            <div id="itinerary-cards-container" class="space-y-3"></div>
+        </section>
+
+        <!-- VIEW 2: PLACES & ATTRACTIONS -->
+        <section id="view-places" class="tab-content hidden space-y-3">
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xs font-black text-slate-900"><i class="fa-solid fa-compass text-teal-600 mr-1.5"></i>Mauritius Attractions Directory</h2>
+                        <p class="text-[10px] text-slate-500">Sorted for 22m Toddler safety & stroller access</p>
+                    </div>
+                    <button onclick="toggleAddPlaceForm()" class="btn-touch px-2.5 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-[10px] flex items-center gap-1">
+                        <i class="fa-solid fa-plus"></i> Add
+                    </button>
+                </div>
+
+                <!-- Filter Pills -->
+                <div class="flex gap-1 pt-1 overflow-x-auto hide-scrollbar text-[10px]">
+                    <button onclick="filterPlaces('all')" id="filter-all" class="btn-touch px-3 py-1 rounded-xl bg-teal-700 text-white font-bold whitespace-nowrap">All Places</button>
+                    <button onclick="filterPlaces('baby')" id="filter-baby" class="btn-touch px-3 py-1 rounded-xl bg-slate-100 text-slate-700 font-semibold whitespace-nowrap">👶 Toddler OK</button>
+                    <button onclick="filterPlaces('adult')" id="filter-adult" class="btn-touch px-3 py-1 rounded-xl bg-slate-100 text-slate-700 font-semibold whitespace-nowrap">⚠️ Skip / Adult</button>
+                </div>
+            </div>
+
+            <!-- Add/Edit Attraction Form -->
+            <div id="form-add-place" class="hidden bg-slate-900 text-white p-4 rounded-2xl border border-slate-700 shadow-xl space-y-3">
+                <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+                    <h3 id="place-form-title" class="font-bold text-amber-400 text-xs uppercase tracking-wider"><i class="fa-solid fa-map-pin mr-1.5"></i>Add Attraction</h3>
+                    <button onclick="toggleAddPlaceForm()" class="text-slate-400 p-1"><i class="fa-solid fa-xmark text-sm"></i></button>
+                </div>
+                <input type="hidden" id="edit-place-id">
+                <div class="space-y-2 text-xs">
+                    <div>
+                        <label class="block mb-1 text-slate-300 text-[10px] font-semibold">Attraction Name *</label>
+                        <input type="text" id="new-place-title" placeholder="e.g. Odysseo Oceanarium" class="w-full p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs focus:outline-none focus:border-amber-400">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block mb-1 text-slate-300 text-[10px] font-semibold">Suitability *</label>
+                            <select id="new-place-cat" class="w-full p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs">
+                                <option value="baby">👶 Toddler OK</option>
+                                <option value="adult">⚠️ Skip / Adult</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block mb-1 text-slate-300 text-[10px] font-semibold">Region</label>
+                            <input type="text" id="new-place-loc" placeholder="e.g. South Coast" class="w-full p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block mb-1 text-slate-300 text-[10px] font-semibold">Access Note</label>
+                        <input type="text" id="new-place-access" placeholder="e.g. Paved pathways" class="w-full p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs">
+                    </div>
+                    <div>
+                        <label class="block mb-1 text-slate-300 text-[10px] font-semibold">Description</label>
+                        <textarea id="new-place-desc" rows="2" placeholder="e.g. Touch giant tortoises..." class="w-full p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs"></textarea>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-1">
+                    <button onclick="toggleAddPlaceForm()" class="px-3 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold">Cancel</button>
+                    <button onclick="saveCustomPlace()" class="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-bold">Save</button>
+                </div>
+            </div>
+
+            <!-- Places Cards List -->
+            <div id="places-container" class="space-y-3"></div>
+        </section>
+
+        <!-- VIEW 3: RESTAURANTS & FOOD -->
+        <section id="view-restaurants" class="tab-content hidden space-y-3">
+            <div class="bg-amber-50/90 p-3.5 rounded-2xl border border-amber-200/90 flex justify-between items-center">
+                <div>
+                    <h3 class="font-black text-xs text-amber-950"><i class="fa-solid fa-utensils mr-1.5 text-amber-600"></i>Indian & Toddler Food Spots</h3>
+                    <p class="text-[10px] text-amber-800">Curated restaurants with mild food & kid options</p>
+                </div>
+                <button onclick="toggleAddRestaurantForm()" class="btn-touch px-2.5 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-[10px] flex items-center gap-1 shadow-xs">
+                    <i class="fa-solid fa-plus"></i> Add
+                </button>
+            </div>
+
+            <!-- Add Custom Restaurant Form -->
+            <div id="form-add-restaurant" class="hidden bg-slate-900 text-white p-4 rounded-2xl border border-slate-700 shadow-xl space-y-3">
+                <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+                    <h3 id="rest-form-title" class="font-bold text-amber-400 text-xs uppercase tracking-wider"><i class="fa-solid fa-bowl-food mr-1.5"></i>Add Restaurant</h3>
+                    <button onclick="toggleAddRestaurantForm()" class="text-slate-400 p-1"><i class="fa-solid fa-xmark text-sm"></i></button>
+                </div>
+                <input type="hidden" id="edit-rest-id">
+                <div class="space-y-2 text-xs">
+                    <div>
+                        <label class="block mb-1 text-slate-300 text-[10px] font-semibold">Restaurant Name *</label>
+                        <input type="text" id="new-rest-name" placeholder="e.g. Saravanaa Bhavan" class="w-full p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block mb-1 text-slate-300 text-[10px] font-semibold">Specialty</label>
+                            <input type="text" id="new-rest-cuisine" placeholder="e.g. South Indian / Veg" class="w-full p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs">
+                        </div>
+                        <div>
+                            <label class="block mb-1 text-slate-300 text-[10px] font-semibold">Location</label>
+                            <input type="text" id="new-rest-loc" placeholder="e.g. Flic en Flac" class="w-full p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block mb-1 text-slate-300 text-[10px] font-semibold">Distance Note</label>
+                        <input type="text" id="new-rest-dist" placeholder="e.g. ~20 mins drive" class="w-full p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs">
+                    </div>
+                    <div>
+                        <label class="block mb-1 text-slate-300 text-[10px] font-semibold">Dishes & Toddler Notes</label>
+                        <textarea id="new-rest-notes" rows="2" placeholder="e.g. Mild khichdi / dosa available..." class="w-full p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs"></textarea>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-1">
+                    <button onclick="toggleAddRestaurantForm()" class="px-3 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold">Cancel</button>
+                    <button onclick="saveCustomRestaurant()" class="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-bold">Save</button>
+                </div>
+            </div>
+
+            <!-- Restaurants Cards Container -->
+            <div id="restaurants-container" class="space-y-3"></div>
+        </section>
+
+        <!-- VIEW 4: BOOKING HUB -->
+        <section id="view-hub" class="tab-content hidden space-y-3">
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                <div class="border-b border-slate-100 pb-2.5 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xs font-black text-slate-900"><i class="fa-solid fa-folder-open text-teal-600 mr-1.5"></i>Flight, Car & Hotel Hub</h2>
+                        <p class="text-[10px] text-slate-500">Keep all confirmations in one place</p>
+                    </div>
+                    <button onclick="saveHubData()" class="btn-touch px-3 py-1.5 bg-teal-700 text-white rounded-xl font-bold text-[10px] shadow-xs flex items-center gap-1">
+                        <i class="fa-solid fa-floppy-disk"></i> Save
+                    </button>
+                </div>
+
+                <!-- Flight Legs Section -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-extrabold text-slate-900 text-[10px] uppercase tracking-wider text-teal-800">
+                            <i class="fa-solid fa-plane mr-1"></i> Flight Details
+                        </h3>
+                        <button onclick="addFlightLeg()" class="btn-touch px-2 py-1 bg-teal-700 text-white text-[10px] font-bold rounded-lg flex items-center gap-1">
+                            <i class="fa-solid fa-plus"></i> Leg
+                        </button>
+                    </div>
+                    <div id="flights-container" class="space-y-2"></div>
+                </div>
+
+                <!-- Car Rental Hub -->
+                <div class="bg-amber-50/70 p-3 rounded-xl border border-amber-200 space-y-2 text-xs">
+                    <h3 class="font-extrabold text-amber-950 text-[10px] uppercase tracking-wider flex items-center justify-between">
+                        <span><i class="fa-solid fa-car mr-1 text-amber-600"></i> Car Rental (Ebrahim Tours)</span>
+                        <span class="text-[9px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full font-black">MUR 15,600</span>
+                    </h3>
+                    <div>
+                        <label class="block text-slate-600 font-semibold text-[10px] mb-1">Car Model & Vendor</label>
+                        <input type="text" id="hub-car-vendor" class="w-full p-2 rounded-lg border border-slate-300 bg-white text-xs font-bold text-slate-800">
+                    </div>
+                    <div>
+                        <label class="block text-slate-600 font-semibold text-[10px] mb-1">Child Seat & Terms</label>
+                        <input type="text" id="hub-car-seat" class="w-full p-2 rounded-lg border border-slate-300 bg-white text-xs font-semibold text-teal-700">
+                    </div>
+                </div>
+
+                <!-- Hotel 1 Hub -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2 text-xs">
+                    <h3 class="font-extrabold text-slate-900 text-[10px] uppercase tracking-wider text-amber-800"><i class="fa-solid fa-hotel mr-1"></i> Resort 1: Laguna Beach Hotel</h3>
+                    <textarea id="hub-hotel1-ref" rows="2" class="w-full p-2 rounded-lg border border-slate-300 bg-white text-xs"></textarea>
+                </div>
+
+                <!-- Hotel 2 Hub -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2 text-xs">
+                    <h3 class="font-extrabold text-slate-900 text-[10px] uppercase tracking-wider text-teal-800"><i class="fa-solid fa-hotel mr-1"></i> Resort 2: OUTRIGGER Resort</h3>
+                    <textarea id="hub-hotel2-ref" rows="2" class="w-full p-2 rounded-lg border border-slate-300 bg-white text-xs"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 5: TO-DO & CHECKLIST -->
+        <section id="view-todo" class="tab-content hidden space-y-3">
+            <div class="bg-gradient-to-r from-teal-800 to-emerald-800 text-white p-3.5 rounded-2xl shadow-xs flex justify-between items-center">
+                <div>
+                    <h2 class="text-xs font-black"><i class="fa-solid fa-list-check text-amber-300 mr-1.5"></i>Pre-Trip Checklist</h2>
+                    <p class="text-[10px] text-teal-100">Tap items to mark done as you pack</p>
+                </div>
+                <button onclick="resetChecklists()" class="btn-touch text-[10px] bg-white/10 text-white px-2.5 py-1 rounded-xl border border-white/20 font-bold">
+                    Uncheck All
+                </button>
+            </div>
+
+            <!-- Add Task Form -->
+            <div class="bg-white p-3 rounded-2xl border border-slate-200 shadow-xs space-y-2">
+                <h3 class="font-bold text-slate-900 text-[10px] uppercase tracking-wider text-teal-700"><i class="fa-solid fa-plus-circle mr-1"></i> Add Packing or Task Item</h3>
+                <div class="space-y-2">
+                    <select id="todo-category-select" class="w-full text-xs p-2 rounded-xl border border-slate-200 bg-slate-50 font-bold">
+                        <option value="baby">👶 Toddler Beach & Daily Essentials</option>
+                        <option value="meds">💊 Meds, Snacks & Travel Docs</option>
+                        <option value="general">🛍️ General Prep & Driving License</option>
+                    </select>
+                    <div class="flex gap-2">
+                        <input type="text" id="input-todo-item" placeholder="e.g. Share new Driving License image..." class="flex-1 text-xs p-2 rounded-xl border border-slate-200 bg-slate-50">
+                        <button onclick="addTodoItem()" class="btn-touch bg-teal-700 text-white px-3 py-2 rounded-xl text-xs font-bold shadow-xs">Add</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Checklist Sections -->
+            <div class="space-y-3">
+                <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
+                    <h3 class="font-bold text-slate-900 text-[10px] uppercase tracking-wider text-teal-800 border-b pb-1.5 flex justify-between items-center">
+                        <span><i class="fa-solid fa-baby-carriage text-teal-600 mr-1"></i> Toddler Beach & Daily</span>
+                        <span id="count-baby" class="bg-teal-50 text-teal-800 px-2 py-0.5 rounded-full font-bold text-[9px]">0</span>
+                    </h3>
+                    <div id="list-baby" class="space-y-1 text-xs"></div>
+                </div>
+
+                <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
+                    <h3 class="font-bold text-slate-900 text-[10px] uppercase tracking-wider text-rose-800 border-b pb-1.5 flex justify-between items-center">
+                        <span><i class="fa-solid fa-prescription-bottle-medical text-rose-600 mr-1"></i> Meds, Snacks & Docs</span>
+                        <span id="count-meds" class="bg-rose-50 text-rose-800 px-2 py-0.5 rounded-full font-bold text-[9px]">0</span>
+                    </h3>
+                    <div id="list-meds" class="space-y-1 text-xs"></div>
+                </div>
+
+                <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
+                    <h3 class="font-bold text-slate-900 text-[10px] uppercase tracking-wider text-amber-800 border-b pb-1.5 flex justify-between items-center">
+                        <span><i class="fa-solid fa-clipboard-list text-amber-600 mr-1"></i> General Shopping & Driving</span>
+                        <span id="count-general" class="bg-amber-50 text-amber-800 px-2 py-0.5 rounded-full font-bold text-[9px]">0</span>
+                    </h3>
+                    <div id="list-general" class="space-y-1 text-xs"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 6: EXPENSES TRACKER -->
+        <section id="view-expenses" class="tab-content hidden space-y-3">
+            <div class="bg-gradient-to-r from-amber-600 to-amber-800 text-white p-3.5 rounded-2xl shadow-xs flex justify-between items-center">
+                <div>
+                    <h2 class="text-xs font-black"><i class="fa-solid fa-wallet text-amber-200 mr-1.5"></i>Trip Expense Tracker</h2>
+                    <p class="text-[10px] text-amber-100">Log INR (₹) and MUR (₨) spends</p>
+                </div>
+                <div class="text-right bg-amber-950/40 p-2 rounded-xl border border-amber-400/30">
+                    <div class="text-[8px] uppercase font-bold text-amber-200">Total Tracked</div>
+                    <div id="total-expense-summary" class="text-xs font-black text-white">₹0 | ₨0</div>
+                </div>
+            </div>
+
+            <!-- Add Expense Form -->
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
+                <h3 class="font-bold text-slate-900 text-[10px] uppercase tracking-wider text-amber-800 border-b pb-1"><i class="fa-solid fa-plus-circle mr-1"></i> Record Expense Entry</h3>
+                <div class="space-y-2 text-xs">
+                    <div>
+                        <label class="block text-slate-600 font-semibold text-[10px] mb-0.5">Description *</label>
+                        <input type="text" id="exp-title" placeholder="e.g. Flight, Dinner, Forex..." class="w-full p-2 rounded-xl border border-slate-300 bg-slate-50 text-xs">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-slate-600 font-semibold text-[10px] mb-0.5">Amount *</label>
+                            <input type="number" id="exp-amount" placeholder="e.g. 15600" class="w-full p-2 rounded-xl border border-slate-300 bg-slate-50 text-xs font-bold">
+                        </div>
+                        <div>
+                            <label class="block text-slate-600 font-semibold text-[10px] mb-0.5">Currency</label>
+                            <select id="exp-currency" class="w-full p-2 rounded-xl border border-slate-300 bg-slate-50 text-xs font-bold">
+                                <option value="MUR">MUR (₨)</option>
+                                <option value="INR">INR (₹)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="USD">USD ($)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-slate-600 font-semibold text-[10px] mb-0.5">Category</label>
+                        <select id="exp-category" class="w-full p-2 rounded-xl border border-slate-300 bg-slate-50 text-xs">
+                            <option value="Car Rental">Car Rental</option>
+                            <option value="Flights">Flights</option>
+                            <option value="Hotels">Hotels</option>
+                            <option value="Food & Dining">Food & Dining</option>
+                            <option value="Activities">Activities / Boat</option>
+                            <option value="Shopping">Shopping & Forex</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="addExpense()" class="btn-touch w-full py-2 bg-amber-600 text-white rounded-xl font-bold text-xs shadow-xs mt-1">
+                    <i class="fa-solid fa-plus mr-1"></i> Add Expense
+                </button>
+            </div>
+
+            <!-- Expense List -->
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
+                <div class="flex justify-between items-center border-b pb-1.5">
+                    <h3 class="font-bold text-slate-900 text-[10px] uppercase tracking-wider text-slate-700"><i class="fa-solid fa-list mr-1 text-amber-600"></i> Expenses History</h3>
+                    <button onclick="clearAllExpenses()" class="text-[10px] text-rose-600 font-bold"><i class="fa-solid fa-trash-can mr-1"></i> Clear</button>
+                </div>
+                <div id="expenses-container" class="space-y-1.5 text-xs"></div>
+            </div>
+        </section>
+
+        <!-- VIEW 7: SAFETY & DRIVING -->
+        <section id="view-contacts" class="tab-content hidden space-y-3">
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                <h2 class="text-xs font-black text-rose-700 border-b pb-2 flex items-center gap-1.5">
+                    <i class="fa-solid fa-phone-volume"></i> Emergency & Helpline Numbers
+                </h2>
+                <div class="space-y-2 text-xs">
+                    <div class="p-2.5 bg-slate-50 rounded-xl flex justify-between items-center">
+                        <span class="font-bold text-slate-800">Police & Medical Emergency</span>
+                        <a href="tel:999" class="btn-touch bg-rose-600 text-white px-3 py-1.5 rounded-xl font-extrabold text-xs">999 / 112</a>
+                    </div>
+                    <div class="p-2.5 bg-slate-50 rounded-xl flex justify-between items-center">
+                        <span class="font-bold text-slate-800">SAMU Ambulance</span>
+                        <a href="tel:114" class="btn-touch bg-rose-600 text-white px-3 py-1.5 rounded-xl font-extrabold text-xs">114</a>
+                    </div>
+                    <div class="p-2.5 bg-slate-50 rounded-xl flex justify-between items-center">
+                        <span class="font-bold text-slate-800">Tourist Police Helpline</span>
+                        <a href="tel:+2302110889" class="btn-touch bg-teal-700 text-white px-3 py-1.5 rounded-xl font-extrabold text-xs">+230 211 0889</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Driving Rules & Toddler Law Cheat Sheet -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                <h2 class="text-xs font-black text-teal-800 border-b pb-2 flex items-center gap-1.5">
+                    <i class="fa-solid fa-shield-halved"></i> Mauritius Driving Laws Cheat Sheet
+                </h2>
+                <ul class="text-xs text-slate-700 space-y-2 font-medium">
+                    <li class="flex items-start gap-2 bg-amber-50 p-2.5 rounded-xl border border-amber-200 text-amber-950">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-600 mt-0.5 text-sm"></i>
+                        <span><strong>Toddler Car Seat Law:</strong> Children under 10 years are <strong>strictly forbidden</strong> in the front seat. Your daughter must sit in her Group 1 car seat in the back row!</span>
+                    </li>
+                    <li class="flex items-start gap-2 bg-slate-50 p-2 rounded-xl border border-slate-200">
+                        <i class="fa-solid fa-circle-check text-emerald-600 mt-0.5"></i>
+                        <span><strong>Left-Hand Traffic:</strong> Drives on the left side (same as India!). Clockwise roundabouts.</span>
+                    </li>
+                    <li class="flex items-start gap-2 bg-slate-50 p-2 rounded-xl border border-slate-200">
+                        <i class="fa-solid fa-circle-check text-emerald-600 mt-0.5"></i>
+                        <span><strong>Speed Cameras:</strong> 100 km/h on M1 motorway, 40–50 km/h inside coastal villages. Automated radars strictly enforced.</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- EDIT DAY MODAL (Slide-up Bottom Sheet on Mobile) -->
+    <div id="modal-edit-day" class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-lg w-full p-4 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto text-xs animate-slide-up">
+            <div class="flex justify-between items-center border-b pb-2 sticky top-0 bg-white z-10">
+                <h3 class="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
+                    <i class="fa-solid fa-pen-to-square text-teal-600"></i> Edit Itinerary Details
+                </h3>
+                <button onclick="closeEditDayModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 font-bold text-sm">✕</button>
+            </div>
+            <input type="hidden" id="edit-day-id">
+            <div class="space-y-2.5">
+                <div>
+                    <label class="block font-bold text-slate-700 text-[10px] mb-0.5">Day Title & Date</label>
+                    <input type="text" id="edit-day-title" class="w-full p-2 rounded-xl border border-slate-300 font-bold bg-slate-50">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 text-[10px] mb-0.5">Location Tag</label>
+                    <input type="text" id="edit-day-tag" class="w-full p-2 rounded-xl border border-slate-300 bg-slate-50">
+                </div>
+                <div class="border-t pt-2">
+                    <label class="block font-bold text-slate-700 text-[10px] mb-0.5">Morning Plan Title</label>
+                    <input type="text" id="edit-day-morning-title" class="w-full p-2 rounded-xl border border-slate-300 bg-slate-50 mb-1">
+                    <label class="block font-semibold text-slate-500 text-[9px] mb-0.5">Morning Description</label>
+                    <textarea id="edit-day-morning-desc" rows="2" class="w-full p-2 rounded-xl border border-slate-300 bg-slate-50"></textarea>
+                </div>
+                <div class="border-t pt-2">
+                    <label class="block font-bold text-slate-700 text-[10px] mb-0.5">Afternoon Plan Title</label>
+                    <input type="text" id="edit-day-afternoon-title" class="w-full p-2 rounded-xl border border-slate-300 bg-slate-50 mb-1">
+                    <label class="block font-semibold text-slate-500 text-[9px] mb-0.5">Afternoon Description</label>
+                    <textarea id="edit-day-afternoon-desc" rows="2" class="w-full p-2 rounded-xl border border-slate-300 bg-slate-50"></textarea>
+                </div>
+                <div class="border-t pt-2">
+                    <label class="block font-bold text-amber-800 text-[10px] mb-0.5">Dinner (Indian Mode)</label>
+                    <textarea id="edit-day-dinner-indian" rows="2" class="w-full p-2 rounded-xl border border-amber-200 bg-amber-50/50"></textarea>
+                </div>
+                <div class="border-t pt-2">
+                    <label class="block font-bold text-teal-800 text-[10px] mb-0.5">Dinner (Local Mode)</label>
+                    <textarea id="edit-day-dinner-local" rows="2" class="w-full p-2 rounded-xl border border-teal-200 bg-teal-50/50"></textarea>
+                </div>
+            </div>
+            <div class="flex justify-between items-center pt-2 border-t">
+                <button onclick="deleteDayFromModal()" class="btn-touch px-3 py-1.5 bg-rose-100 text-rose-800 rounded-xl font-bold text-[10px]">
+                    <i class="fa-solid fa-trash-can"></i> Delete
+                </button>
+                <div class="flex gap-2">
+                    <button onclick="closeEditDayModal()" class="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl font-semibold text-xs">Cancel</button>
+                    <button onclick="saveDayEdit()" class="btn-touch px-4 py-1.5 bg-teal-700 text-white rounded-xl font-bold text-xs shadow-xs">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SYNC & SHARE DATA MODAL -->
+    <div id="modal-sync" class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full p-4 shadow-2xl space-y-3 animate-slide-up text-xs">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
+                    <i class="fa-solid fa-cloud-arrow-up text-teal-600"></i> Real-Time Cloud Sync & Share
+                </h3>
+                <button onclick="closeSyncModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 font-bold text-sm">✕</button>
+            </div>
+            <div class="p-3 bg-teal-50 rounded-xl border border-teal-200 text-teal-950 space-y-1">
+                <p class="font-bold text-[11px]"><i class="fa-solid fa-mobile-screen-button mr-1"></i> Live Multi-Device Sync Active</p>
+                <p class="text-[10px] text-teal-800">Your trip data syncs automatically across your phone and your wife's phone in real time!</p>
+            </div>
+            <div>
+                <label class="block font-bold text-slate-700 text-[10px] mb-1">Shared Family Trip Code</label>
+                <div class="flex gap-2">
+                    <input type="text" id="shared-trip-id-input" value="mauritius-2026" class="flex-1 p-2 rounded-xl border border-slate-300 font-mono font-bold text-xs bg-slate-50">
+                    <button onclick="changeTripId()" class="btn-touch px-3 py-2 bg-teal-700 text-white rounded-xl font-bold text-xs">Connect</button>
+                </div>
+                <p class="text-[9px] text-slate-500 mt-1">Both phones must use the same Trip Code to see live updates.</p>
+            </div>
+            <div class="border-t pt-2">
+                <label class="block font-bold text-slate-700 text-[10px] mb-1">Manual Backup Code (Optional)</label>
+                <textarea id="sync-data-box" rows="3" class="w-full p-2 rounded-xl border border-slate-300 font-mono text-[9px] bg-slate-50 select-all"></textarea>
+            </div>
+            <div class="flex flex-col gap-2">
+                <button onclick="copySyncData()" class="btn-touch w-full py-2 bg-slate-800 text-white rounded-xl font-bold flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-copy"></i> Copy Backup Code
+                </button>
+                <button onclick="importSyncDataPrompt()" class="btn-touch w-full py-2 bg-amber-500 text-slate-950 rounded-xl font-bold flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-file-import"></i> Import Backup Code
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE STICKY BOTTOM NAVIGATION BAR -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 z-40 pb-safe shadow-[0_-4px_16px_rgba(0,0,0,0.08)]">
+        <div class="flex overflow-x-auto hide-scrollbar px-1 py-1.5 scroll-smooth justify-between items-center text-center">
+            <button onclick="switchTab('itinerary')" id="mob-itinerary" class="btn-touch flex-1 min-w-[52px] py-1 text-teal-700 flex flex-col items-center gap-1 font-bold">
+                <i class="fa-solid fa-calendar-days text-base"></i>
+                <span class="text-[9px] tracking-tight">Itinerary</span>
+            </button>
+            <button onclick="switchTab('places')" id="mob-places" class="btn-touch flex-1 min-w-[52px] py-1 text-slate-400 flex flex-col items-center gap-1 font-semibold">
+                <i class="fa-solid fa-compass text-base"></i>
+                <span class="text-[9px] tracking-tight">Places</span>
+            </button>
+            <button onclick="switchTab('restaurants')" id="mob-restaurants" class="btn-touch flex-1 min-w-[52px] py-1 text-slate-400 flex flex-col items-center gap-1 font-semibold">
+                <i class="fa-solid fa-utensils text-base"></i>
+                <span class="text-[9px] tracking-tight">Food</span>
+            </button>
+            <button onclick="switchTab('hub')" id="mob-hub" class="btn-touch flex-1 min-w-[52px] py-1 text-slate-400 flex flex-col items-center gap-1 font-semibold">
+                <i class="fa-solid fa-passport text-base"></i>
+                <span class="text-[9px] tracking-tight">Hub</span>
+            </button>
+            <button onclick="switchTab('todo')" id="mob-todo" class="btn-touch flex-1 min-w-[52px] py-1 text-slate-400 flex flex-col items-center gap-1 font-semibold">
+                <i class="fa-solid fa-list-check text-base"></i>
+                <span class="text-[9px] tracking-tight">To-Do</span>
+            </button>
+            <button onclick="switchTab('expenses')" id="mob-expenses" class="btn-touch flex-1 min-w-[52px] py-1 text-slate-400 flex flex-col items-center gap-1 font-semibold">
+                <i class="fa-solid fa-wallet text-base text-amber-600"></i>
+                <span class="text-[9px] tracking-tight">Expenses</span>
+            </button>
+            <button onclick="switchTab('contacts')" id="mob-contacts" class="btn-touch flex-1 min-w-[52px] py-1 text-slate-400 flex flex-col items-center gap-1 font-semibold">
+                <i class="fa-solid fa-shield-halved text-base"></i>
+                <span class="text-[9px] tracking-tight">Safety</span>
+            </button>
+        </div>
+    </nav>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase Setup with Environment Fallbacks
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'mauritius-trip-companion';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config) 
+            : {
+                apiKey: "AIzaSyDummyKeyForFallbackOnly",
+                authDomain: "companion-app.firebaseapp.com",
+                projectId: "companion-app",
+                storageBucket: "companion-app.appspot.com",
+                messagingSenderId: "000000000",
+                appId: "1:000000000:web:000000000"
+            };
+
+        let app, auth, db, user;
+        let unsubscribeCloud = null;
+        let currentTripId = localStorage.getItem('mru_trip_id') || 'mauritius-2026';
+        let isCloudUpdating = false;
+
+        let itineraryMode = 'indian';
+        let customPlaces = [];
+        let customRestaurants = [];
+        
+        let checklistData = {
+            baby: [
+                { id: 1, text: "Water Shoes / Reef Shoes (Toddler & Adults)", completed: false },
+                { id: 2, text: "UV Protection Rashguards (SPF50+ Full Sleeve)", completed: false },
+                { id: 3, text: "Toddler Sun Hat & UV Sunglasses", completed: false },
+                { id: 4, text: "Mineral Safe Baby Sunscreen (SPF50)", completed: false },
+                { id: 5, text: "Compact Lightweight Foldable Stroller", completed: false },
+                { id: 6, text: "Swim Diapers (Extra pack for Île aux Cerfs day)", completed: false }
+            ],
+            meds: [
+                { id: 7, text: "Toddler Fever Meds / Paracetamol & ORS", completed: false },
+                { id: 8, text: "Bandages, Antiseptic & Mosquito Repellent", completed: false },
+                { id: 9, text: "Dry Snacks / Toddler Milk / Sippy Cups", completed: false },
+                { id: 10, text: "Share updated Driving License image with Hannah once physical card arrives", completed: false },
+                { id: 11, text: "Passports & Driving License physical copies packed", completed: false },
+                { id: 12, text: "Hotel Vouchers & Seaplane Booking Details", completed: false }
+            ],
+            general: [
+                { id: 13, text: "Practice toddler car seat at home with cartoons/toys", completed: false },
+                { id: 14, text: "Download favorite cartoons offline on phone for car drives", completed: false },
+                { id: 15, text: "Buy MUR Forex or Forex Card", completed: false },
+                { id: 16, text: "Pack phone chargers, power bank, universal adapters", completed: false }
+            ]
+        };
+
+        let flightsList = [
+            { id: 1, leg: "Outbound Leg 1", details: "Flight No: ____ • From Home City to Hub • Date: Oct 16/17" },
+            { id: 2, leg: "Outbound Leg 2", details: "Flight No: ____ • Hub to SSR Airport (MRU) • Date: Oct 17 AM" },
+            { id: 3, leg: "Return Leg 1", details: "Flight No: ____ • SSR Airport (MRU) to Hub • Date: Oct 25 AM" },
+            { id: 4, leg: "Return Leg 2", details: "Flight No: ____ • Hub to Home City • Date: Oct 25" }
+        ];
+
+        let expensesList = [];
+        let itineraryDays = [];
+
+        const defaultItineraryDays = [
+            {
+                id: 1,
+                title: "Day 1 • Oct 17th (Sat)",
+                tag: "Laguna Beach Resort",
+                icon: "fa-plane-arrival",
+                morningTitle: "Morning: Package Transfer & Car Delivery",
+                morningDesc: "Land at SSR Airport. Package transfer brings family & bags to Laguna Beach Hotel. Ebrahim Tours delivers Suzuki Swift + Toddler Seat to hotel lobby at 10:00 AM.",
+                afternoonTitle: "Afternoon: Check-in, Unpack & Pool Nap",
+                afternoonDesc: "Settle into room, let daughter adjust, and enjoy resort pool.",
+                dinnerIndian: "Happy Rajah (Grand Baie) or Indian buffet options at resort (dal-rice/mild curry).",
+                dinnerLocal: "Laguna Beach Resort Buffet — Local Creole fish, tropical salads, and mild rice."
+            },
+            {
+                id: 2,
+                title: "Day 2 • Oct 18th (Sun) — MUST-VISIT ISLAND",
+                tag: "Île aux Cerfs",
+                icon: "fa-umbrella-beach",
+                morningTitle: "All Day Excursion to Île aux Cerfs",
+                morningDesc: "Short drive to Trou d'Eau Douce. Board boat transfer to Île aux Cerfs island. Shallow, warm lagoon waters perfect for 22m toddler splash time. Wear UV rashguards.",
+                afternoonTitle: "Afternoon: Beach Relaxation",
+                afternoonDesc: "Shaded pine trees and calm waters.",
+                dinnerIndian: "Beachfront lunch on island. Return to Laguna Beach Hotel for dinner.",
+                dinnerLocal: "Beachfront Creole lunch on island. Return to Laguna Beach Hotel for dinner."
+            },
+            {
+                id: 3,
+                title: "Day 3 • Oct 19th (Mon)",
+                tag: "Laguna Beach Resort",
+                icon: "fa-tree",
+                morningTitle: "Morning: SSR Botanical Garden (Pamplemousses)",
+                morningDesc: "Drive ~35 mins. Wide, flat, smooth paved pathways ideal for stroller walk under giant tree canopies. See giant Amazon water lilies.",
+                afternoonTitle: "Afternoon: Caudan Waterfront & Odysseo Oceanarium",
+                afternoonDesc: "Park in Caudan garage. Visit AC Odysseo Oceanarium glass tunnel and umbrella street.",
+                dinnerIndian: "Lunch: Namaste Restaurant at Caudan Waterfront. Dinner: Hotel buffet.",
+                dinnerLocal: "Lunch: Waterfront Creole bento. Dinner: Resort dining."
+            },
+            {
+                id: 4,
+                title: "Day 4 • Oct 20th (Tue)",
+                tag: "Laguna Beach Resort",
+                icon: "fa-water",
+                morningTitle: "Morning: Blue Bay Marine Park (Glass Boat)",
+                morningDesc: "Glass-bottom boat tour so toddler can see coral & fish safely without swimming.",
+                afternoonTitle: "Afternoon: Grand Bassin (Ganga Talao)",
+                afternoonDesc: "Visit sacred crater lake, towering Shiva and Durga statues. Smooth paved grounds.",
+                dinnerIndian: "Delhi Darbar (Rose Belle) for lunch near airport region. Hotel buffet for dinner.",
+                dinnerLocal: "Local seaside bistro at Blue Bay beach for lunch. Hotel buffet for dinner."
+            },
+            {
+                id: 5,
+                title: "Day 5 • Oct 21st (Wed) — RESORT TRANSFER DAY",
+                tag: "Switch to OUTRIGGER",
+                icon: "fa-right-left",
+                morningTitle: "Morning: La Vanille Nature Park (En Route Stop)",
+                morningDesc: "Check out with bags in trunk. Stop en route at La Vanille Nature Park. Touch and feed giant Aldabra tortoises on smooth shaded paths.",
+                afternoonTitle: "Afternoon: Check in at OUTRIGGER Resort",
+                afternoonDesc: "Drive ~25 mins from La Vanille to Outrigger (Bel Ombre). Unpack for final 4 nights.",
+                dinnerIndian: "Flavor's Of India (Flic en Flac) or Outrigger Mercado Restaurant's Indian live station.",
+                dinnerLocal: "The Hungry Crocodile Restaurant at La Vanille for lunch; Outrigger Resort for dinner."
+            },
+            {
+                id: 6,
+                title: "Day 6 • Oct 22nd (Thu) — SEAPLANE DAY",
+                tag: "Underwater Waterfall",
+                icon: "fa-plane-up",
+                isSeaplane: true,
+                morningTitle: "Seaplane Flight & Chamarel 7 Colored Earth",
+                morningDesc: "Seaplane tour over Le Morne underwater waterfall. Visit Chamarel 7 Colored Earth boardwalks.",
+                afternoonTitle: "Afternoon: Chamarel Viewpoints",
+                afternoonDesc: "Scenic mountain coffee shop stop.",
+                dinnerIndian: "Zub Express (Flic en Flac) or Outrigger Room Service.",
+                dinnerLocal: "Le Chamarel Restaurant overlooking Le Morne peak."
+            },
+            {
+                id: 7,
+                title: "Day 7 • Oct 23rd (Fri) — RELAXATION DAY",
+                tag: "Outrigger Resort",
+                icon: "fa-couch",
+                morningTitle: "Resort Relaxation & Bel Ombre Beach",
+                morningDesc: "Zero long driving. Enjoy Outrigger pools, toddler beach splash zone, and spa.",
+                afternoonTitle: "Afternoon: Leisure & Pool Time",
+                afternoonDesc: "Relax by the pool deck with drinks and toddler games.",
+                dinnerIndian: "Mercado Indian Live Station at Outrigger.",
+                dinnerLocal: "Outrigger Beachfront Dining."
+            },
+            {
+                id: 8,
+                title: "Day 8 • Oct 24th (Sat) — CAR RETURN DAY",
+                tag: "Car Collection @ 5 PM",
+                icon: "fa-umbrella-beach",
+                morningTitle: "Resort Beach & Final Souvenir Shopping",
+                morningDesc: "Unwind at the beach. Ebrahim Tours collects Suzuki Swift at Outrigger reception at 5:00 PM.",
+                afternoonTitle: "Afternoon: Sunset Stroll",
+                afternoonDesc: "Peaceful evening beach walk along Bel Ombre shoreline.",
+                dinnerIndian: "Farewell Dinner at Outrigger Resort.",
+                dinnerLocal: "Farewell Dinner at Outrigger Resort."
+            },
+            {
+                id: 9,
+                title: "Day 9 • Oct 25th (Sun) — DEPARTURE",
+                tag: "Airport Transfer",
+                icon: "fa-plane-departure",
+                morningTitle: "Package Transfer to SSR Airport & Flight Home",
+                morningDesc: "Package transfer pick-up at Outrigger reception (~1 hr to airport). Board flight and return home!",
+                afternoonTitle: "Departure Flight",
+                afternoonDesc: "Fly back home with great family memories.",
+                dinnerIndian: "In-flight meal.",
+                dinnerLocal: "In-flight meal."
+            }
+        ];
+
+        const defaultPlaces = [
+            { id: 1, title: "La Vanille Nature Park", category: "baby", location: "Rivière des Anguilles (South)", access: "Paved / Stroller Easy", desc: "Top toddler attraction! Touch & feed giant Aldabra tortoises freely under shaded pathways." },
+            { id: 2, title: "Île aux Cerfs Island", category: "baby", location: "Trou d'Eau Douce (East)", access: "10-min Boat / Sandy Beach", desc: "Shallow, warm turquoise lagoon extending far out, acting as a natural splash pool." },
+            { id: 3, title: "SSR Botanical Garden", category: "baby", location: "Pamplemousses (North)", access: "Flat Dirt/Paved Roads", desc: "Giant Amazon water lilies and massive mahogany canopy trees providing cool stroller walks." },
+            { id: 4, title: "Chamarel 7 Colored Earth", category: "baby", location: "Chamarel (South West)", access: "Wooden Boardwalks", desc: "Volcanic sand dunes with guardrails, giant tortoise enclosure, and on-site café." },
+            { id: 5, title: "Odysseo Oceanarium & Caudan", category: "baby", location: "Port Louis Harbor", access: "100% Indoor AC / Stroller Perfect", desc: "Underwater glass tunnels, stingrays, sharks, and umbrella-covered waterfront promenade." },
+            { id: 6, title: "Blue Bay Marine Park", category: "baby", location: "Blue Bay (South East)", access: "Glass-Bottom Boat", desc: "Watch brain corals and colorful fish through a glass floor without having to swim." },
+            { id: 7, title: "Grand Bassin (Ganga Talao)", category: "baby", location: "Savanne District", access: "Paved Courtyards", desc: "Sacred crater lake surrounded by Hindu temples and 108ft Shiva & Durga statues." },
+            { id: 8, title: "Le Morne Brabant Hike", category: "adult", location: "Le Morne Peninsula", access: "Steep Rock Scramble", desc: "⚠️ SKIP WITH TODDLER: Steep rock scrambles and exposed cliff edges." },
+            { id: 9, title: "Tamarin Falls Canyoning", category: "adult", location: "Henrietta", access: "Slippery Mud Ravines", desc: "⚠️ SKIP WITH TODDLER: Muddy jungle trails and river crossings strictly for adult hikers." },
+            { id: 10, title: "Gris Gris Beach & Crying Rock", category: "adult", location: "Souillac (South)", access: "Cliffside Viewpoint", desc: "⚠️ CAUTION: Open ocean waves smash against cliffs. Swimming strictly prohibited." }
+        ];
+
+        const defaultRestaurants = [
+            { id: 1, name: "Happy Rajah", cuisine: "North & South Indian", location: "Grand Baie & Phoenix", distance: "~40 mins from Laguna Beach", notes: "Classic curries, tandoori, naans, and child-friendly mild rice dishes." },
+            { id: 2, name: "Namaste Restaurant", cuisine: "North Indian / Mughlai", location: "Caudan Waterfront, Port Louis", distance: "Port Louis Harbor", notes: "Upscale dining with harbor views. Great stop during Port Louis day." },
+            { id: 3, name: "Delhi Darbar", cuisine: "North Indian", location: "Rose Belle", distance: "Near Airport / South Route", notes: "Conveniently located near airport and Grand Bassin route. Excellent biryanis." },
+            { id: 4, name: "Flavor's Of India", cuisine: "North & South Indian", location: "Flic en Flac", distance: "~25 mins from Outrigger", notes: "Casual beachside dining. Perfect stop after Chamarel." }
+        ];
+
+        async function initFirebase() {
+            try {
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                const authToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+                if (authToken) {
+                    await signInWithCustomToken(auth, authToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                user = auth.currentUser;
+                setupRealtimeSync();
+            } catch (err) {
+                console.warn("Cloud Sync init notice (using local offline storage):", err);
+                setSyncStatus("Local Mode", "amber");
+            }
+        }
+
+        function setupRealtimeSync() {
+            if (!db || !currentTripId) return;
+            
+            if (unsubscribeCloud) unsubscribeCloud();
+
+            setSyncStatus("Syncing...", "teal");
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'trips', currentTripId);
+
+            unsubscribeCloud = onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    isCloudUpdating = true;
+                    if (data.itineraryDays) itineraryDays = data.itineraryDays;
+                    if (data.customPlaces) customPlaces = data.customPlaces;
+                    if (data.customRestaurants) customRestaurants = data.customRestaurants;
+                    if (data.checklistData) checklistData = data.checklistData;
+                    if (data.flightsList) flightsList = data.flightsList;
+                    if (data.expensesList) expensesList = data.expensesList;
+                    if (data.seaplaneTime) localStorage.setItem('mru_seaplane_time', data.seaplaneTime);
+                    
+                    renderItinerary();
+                    renderPlaces();
+                    renderRestaurants();
+                    renderFlightsHub();
+                    renderChecklists();
+                    renderExpenses();
+
+                    isCloudUpdating = false;
+                    setSyncStatus("Live Synced", "emerald");
+                } else {
+                    saveStateToCloud();
+                }
+            }, (error) => {
+                console.error("Firestore listener error:", error);
+                setSyncStatus("Saved Locally", "slate");
+            });
+        }
+
+        async function saveStateToCloud() {
+            if (isCloudUpdating) return;
+            setSyncStatus("Saving...", "amber");
+
+            localStorage.setItem('mru_custom_itinerary', JSON.stringify(itineraryDays));
+            localStorage.setItem('mru_custom_places', JSON.stringify(customPlaces));
+            localStorage.setItem('mru_custom_restaurants', JSON.stringify(customRestaurants));
+            localStorage.setItem('mru_checklist_data', JSON.stringify(checklistData));
+            localStorage.setItem('mru_flights', JSON.stringify(flightsList));
+            localStorage.setItem('mru_expenses', JSON.stringify(expensesList));
+
+            if (!db || !user) {
+                setSyncStatus("Saved Locally", "slate");
+                return;
+            }
+
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'trips', currentTripId);
+                const payload = {
+                    itineraryDays,
+                    customPlaces,
+                    customRestaurants,
+                    checklistData,
+                    flightsList,
+                    expensesList,
+                    seaplaneTime: localStorage.getItem('mru_seaplane_time') || '',
+                    lastUpdated: new Date().toISOString()
+                };
+                await setDoc(docRef, payload, { merge: true });
+                setSyncStatus("Live Synced", "emerald");
+            } catch (err) {
+                console.error("Cloud push error:", err);
+                setSyncStatus("Saved Locally", "slate");
+            }
+        }
+
+        function setSyncStatus(text, color) {
+            const badgeText = document.getElementById('sync-status-text');
+            const badgeContainer = document.getElementById('sync-status-badge');
+            if (badgeText) badgeText.innerText = text;
+            if (badgeContainer) {
+                if (color === 'emerald') badgeContainer.className = "px-2 py-1 rounded-xl bg-teal-950/80 text-emerald-400 text-[10px] font-bold border border-emerald-500/30 flex items-center gap-1 shadow-xs";
+                else if (color === 'amber') badgeContainer.className = "px-2 py-1 rounded-xl bg-amber-950/80 text-amber-300 text-[10px] font-bold border border-amber-500/30 flex items-center gap-1 shadow-xs";
+                else badgeContainer.className = "px-2 py-1 rounded-xl bg-slate-800 text-slate-300 text-[10px] font-bold border border-slate-700 flex items-center gap-1 shadow-xs";
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById('view-' + tabId);
+            if (target) target.classList.remove('hidden');
+
+            const navButtons = ['itinerary', 'places', 'restaurants', 'hub', 'todo', 'expenses', 'contacts'];
+            navButtons.forEach(btn => {
+                const navEl = document.getElementById('mob-' + btn);
+                if (navEl) {
+                    if (btn === tabId) {
+                        navEl.className = "btn-touch flex-1 min-w-[52px] py-1 text-teal-700 flex flex-col items-center gap-1 font-bold";
+                    } else {
+                        navEl.className = "btn-touch flex-1 min-w-[52px] py-1 text-slate-400 flex flex-col items-center gap-1 font-semibold";
+                    }
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function setItineraryMode(mode) {
+            itineraryMode = mode;
+            document.getElementById('current-mode-label').innerText = mode === 'indian' ? 'Indian Focus' : 'Local Focus';
+            const btnIndian = document.getElementById('btn-mode-indian');
+            const btnLocal = document.getElementById('btn-mode-local');
+            if (mode === 'indian') {
+                btnIndian.className = "btn-touch px-2.5 py-1 rounded-lg text-[10px] font-extrabold bg-amber-500 text-slate-950 shadow";
+                btnLocal.className = "btn-touch px-2.5 py-1 rounded-lg text-[10px] font-bold text-slate-300";
+            } else {
+                btnLocal.className = "btn-touch px-2.5 py-1 rounded-lg text-[10px] font-extrabold bg-amber-500 text-slate-950 shadow";
+                btnIndian.className = "btn-touch px-2.5 py-1 rounded-lg text-[10px] font-bold text-slate-300";
+            }
+            renderItinerary();
+        }
+
+        function renderItinerary() {
+            const container = document.getElementById('itinerary-cards-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            itineraryDays.forEach(day => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden text-xs";
+                
+                let seaplaneBlock = '';
+                if (day.isSeaplane) {
+                    seaplaneBlock = `
+                        <div class="bg-sky-50 p-2.5 rounded-xl border border-sky-200 flex justify-between items-center mb-2">
+                            <div>
+                                <p class="font-bold text-sky-950 text-[10px]">Seaplane Flight Slot:</p>
+                                <p id="seaplane-time-display" class="text-[11px] text-sky-800 font-black">${localStorage.getItem('mru_seaplane_time') || 'TBD (Tap to set slot)'}</p>
+                            </div>
+                            <button onclick="editSeaplaneTime()" class="btn-touch px-2 py-1 bg-sky-600 text-white font-bold rounded-lg shadow-xs text-[10px]">
+                                <i class="fa-solid fa-pen-to-square"></i> Set Slot
+                            </button>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="bg-teal-700 text-white px-3 py-2 flex justify-between items-center text-xs">
+                        <span class="font-extrabold uppercase tracking-wide flex items-center gap-1">
+                            <i class="fa-solid ${day.icon || 'fa-calendar-day'} mr-1"></i> ${day.title}
+                        </span>
+                        <div class="flex items-center gap-1.5">
+                            <span class="bg-teal-800 text-teal-200 px-2 py-0.5 rounded-full font-bold text-[9px]">${day.tag || 'Mauritius'}</span>
+                            <button onclick="openEditDayModal(${day.id})" class="btn-touch bg-amber-400 hover:bg-amber-300 text-slate-950 px-2 py-0.5 rounded-md font-bold text-[10px] flex items-center gap-1 shadow-xs">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-3 space-y-2 text-xs">
+                        ${seaplaneBlock}
+                        ${day.morningTitle ? `
+                        <div class="flex items-start gap-2">
+                            <i class="fa-solid fa-sun text-amber-500 mt-0.5 text-xs"></i>
+                            <div>
+                                <p class="font-bold text-slate-900">${day.morningTitle}</p>
+                                <p class="text-slate-600 mt-0.5 text-[11px]">${day.morningDesc || ''}</p>
+                            </div>
+                        </div>` : ''}
+                        ${day.afternoonTitle ? `
+                        <div class="flex items-start gap-2">
+                            <i class="fa-solid fa-cloud-sun text-teal-600 mt-0.5 text-xs"></i>
+                            <div>
+                                <p class="font-bold text-slate-900">${day.afternoonTitle}</p>
+                                <p class="text-slate-600 mt-0.5 text-[11px]">${day.afternoonDesc || ''}</p>
+                            </div>
+                        </div>` : ''}
+                        <div class="flex items-start gap-2 border-t border-slate-100 pt-1.5">
+                            <i class="fa-solid fa-utensils text-amber-600 mt-0.5 text-xs"></i>
+                            <div class="flex-1">
+                                <p class="font-bold text-slate-900">Dining Plan</p>
+                                <p class="din-mode-indian text-slate-700 text-[11px] ${itineraryMode === 'local' ? 'hidden' : ''}">${day.dinnerIndian || 'Resort or nearby options.'}</p>
+                                <p class="din-mode-local text-slate-700 text-[11px] ${itineraryMode === 'indian' ? 'hidden' : ''}">${day.dinnerLocal || 'Resort or local options.'}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function openEditDayModal(id) {
+            const day = itineraryDays.find(d => d.id === id);
+            if (!day) return;
+            document.getElementById('edit-day-id').value = day.id;
+            document.getElementById('edit-day-title').value = day.title || '';
+            document.getElementById('edit-day-tag').value = day.tag || '';
+            document.getElementById('edit-day-morning-title').value = day.morningTitle || '';
+            document.getElementById('edit-day-morning-desc').value = day.morningDesc || '';
+            document.getElementById('edit-day-afternoon-title').value = day.afternoonTitle || '';
+            document.getElementById('edit-day-afternoon-desc').value = day.afternoonDesc || '';
+            document.getElementById('edit-day-dinner-indian').value = day.dinnerIndian || '';
+            document.getElementById('edit-day-dinner-local').value = day.dinnerLocal || '';
+
+            document.getElementById('modal-edit-day').classList.remove('hidden');
+        }
+
+        function closeEditDayModal() {
+            document.getElementById('modal-edit-day').classList.add('hidden');
+        }
+
+        function renderPlaces() {
+            const container = document.getElementById('places-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const allPlaces = [...defaultPlaces, ...customPlaces];
+            allPlaces.forEach(place => {
+                const isBaby = place.category === 'baby';
+                const isCustom = place.id > 20;
+                const card = document.createElement('div');
+                card.className = `place-card ${place.category} bg-white p-3.5 rounded-2xl border ${isCustom ? 'border-amber-300 bg-amber-50/40' : 'border-slate-200'} shadow-xs space-y-1.5 relative text-xs`;
+                card.innerHTML = `
+                    <div class="flex justify-between items-start pr-12">
+                        <h3 class="font-bold text-slate-900 text-xs">${place.title} ${isCustom ? '<span class="text-[9px] bg-amber-200 text-amber-900 px-1.5 py-0.5 rounded-full font-bold ml-1">Custom</span>' : ''}</h3>
+                        <span class="${isBaby ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'} text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0">
+                            <i class="fa-solid ${isBaby ? 'fa-baby' : 'fa-triangle-exclamation'} mr-1"></i> ${isBaby ? 'Toddler OK' : 'Skip / Adult'}
+                        </span>
+                    </div>
+                    <p class="text-[11px] text-slate-600 leading-snug">${place.desc}</p>
+                    <div class="text-[10px] text-slate-500 pt-1.5 border-t border-slate-100 flex justify-between items-center">
+                        <span><i class="fa-solid fa-location-dot text-rose-500"></i> ${place.location}</span>
+                        <span class="font-semibold text-teal-700">${place.access}</span>
+                    </div>
+                    <div class="absolute top-2.5 right-2.5 flex gap-1">
+                        ${isCustom ? `<button onclick="editCustomPlace(${place.id})" class="text-slate-400 p-1"><i class="fa-solid fa-pen-to-square text-xs"></i></button>` : ''}
+                        ${isCustom ? `<button onclick="deleteCustomPlace(${place.id})" class="text-slate-400 p-1"><i class="fa-solid fa-trash-can text-xs"></i></button>` : ''}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function toggleAddPlaceForm() {
+            const form = document.getElementById('form-add-place');
+            if (form.classList.contains('hidden')) {
+                document.getElementById('edit-place-id').value = '';
+                document.getElementById('new-place-title').value = '';
+                document.getElementById('new-place-cat').value = 'baby';
+                document.getElementById('new-place-loc').value = '';
+                document.getElementById('new-place-access').value = '';
+                document.getElementById('new-place-desc').value = '';
+                document.getElementById('place-form-title').innerText = "Add Attraction";
+                form.classList.remove('hidden');
+            } else {
+                form.classList.add('hidden');
+            }
+        }
+
+        function editCustomPlace(id) {
+            const place = customPlaces.find(p => p.id === id);
+            if (!place) return;
+            document.getElementById('edit-place-id').value = place.id;
+            document.getElementById('new-place-title').value = place.title || '';
+            document.getElementById('new-place-cat').value = place.category || 'baby';
+            document.getElementById('new-place-loc').value = place.location || '';
+            document.getElementById('new-place-access').value = place.access || '';
+            document.getElementById('new-place-desc').value = place.desc || '';
+            document.getElementById('place-form-title').innerText = "Edit Attraction";
+            document.getElementById('form-add-place').classList.remove('hidden');
+        }
+
+        function filterPlaces(category) {
+            const cards = document.querySelectorAll('.place-card');
+            cards.forEach(card => {
+                if (category === 'all') {
+                    card.classList.remove('hidden');
+                } else if (card.classList.contains(category)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            ['all', 'baby', 'adult'].forEach(cat => {
+                const btn = document.getElementById('filter-' + cat);
+                if (btn) {
+                    if (cat === category) {
+                        btn.className = "btn-touch px-3 py-1 rounded-xl bg-teal-700 text-white font-bold whitespace-nowrap text-[10px]";
+                    } else {
+                        btn.className = "btn-touch px-3 py-1 rounded-xl bg-slate-100 text-slate-700 font-semibold whitespace-nowrap text-[10px]";
+                    }
+                }
+            });
+        }
+
+        function renderRestaurants() {
+            const container = document.getElementById('restaurants-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const allRestaurants = [...defaultRestaurants, ...customRestaurants];
+            allRestaurants.forEach(rest => {
+                const isCustom = rest.id > 20;
+                const card = document.createElement('div');
+                const mapsUrl = `https://maps.google.com/?q=${encodeURIComponent(rest.name + ' ' + rest.location + ' Mauritius')}`;
+                card.className = `bg-white p-3.5 rounded-2xl border ${isCustom ? 'border-amber-300 bg-amber-50/40' : 'border-slate-200'} shadow-xs space-y-2 relative text-xs`;
+                card.innerHTML = `
+                    <div class="flex justify-between items-start pr-12">
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-xs">${rest.name} ${isCustom ? '<span class="text-[9px] bg-amber-200 text-amber-900 px-1.5 py-0.5 rounded-full font-bold ml-1">Custom</span>' : ''}</h3>
+                            <p class="text-[10px] text-slate-500"><i class="fa-solid fa-location-dot text-rose-500"></i> ${rest.location}</p>
+                        </div>
+                        <span class="bg-amber-100 text-amber-800 text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0">${rest.cuisine}</span>
+                    </div>
+                    <p class="text-[11px] text-slate-600">${rest.notes}</p>
+                    <div class="flex justify-between items-center text-[10px] pt-1.5 border-t border-slate-100">
+                        <span class="text-slate-500"><i class="fa-solid fa-car mr-1"></i>${rest.distance}</span>
+                        <a href="${mapsUrl}" target="_blank" class="btn-touch text-teal-700 font-bold hover:underline flex items-center gap-1"><i class="fa-solid fa-map-location-dot"></i> Maps</a>
+                    </div>
+                    <div class="absolute top-2.5 right-2.5 flex gap-1">
+                        ${isCustom ? `<button onclick="editCustomRestaurant(${rest.id})" class="text-slate-400 p-1"><i class="fa-solid fa-pen-to-square text-xs"></i></button>` : ''}
+                        ${isCustom ? `<button onclick="deleteCustomRestaurant(${rest.id})" class="text-slate-400 p-1"><i class="fa-solid fa-trash-can text-xs"></i></button>` : ''}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function toggleAddRestaurantForm() {
+            const form = document.getElementById('form-add-restaurant');
+            if (form.classList.contains('hidden')) {
+                document.getElementById('edit-rest-id').value = '';
+                document.getElementById('new-rest-name').value = '';
+                document.getElementById('new-rest-cuisine').value = '';
+                document.getElementById('new-rest-loc').value = '';
+                document.getElementById('new-rest-dist').value = '';
+                document.getElementById('new-rest-notes').value = '';
+                document.getElementById('rest-form-title').innerText = "Add Restaurant";
+                form.classList.remove('hidden');
+            } else {
+                form.classList.add('hidden');
+            }
+        }
+
+        function editCustomRestaurant(id) {
+            const rest = customRestaurants.find(r => r.id === id);
+            if (!rest) return;
+            document.getElementById('edit-rest-id').value = rest.id;
+            document.getElementById('new-rest-name').value = rest.name || '';
+            document.getElementById('new-rest-cuisine').value = rest.cuisine || '';
+            document.getElementById('new-rest-loc').value = rest.location || '';
+            document.getElementById('new-rest-dist').value = rest.distance || '';
+            document.getElementById('new-rest-notes').value = rest.notes || '';
+            document.getElementById('rest-form-title').innerText = "Edit Restaurant";
+            document.getElementById('form-add-restaurant').classList.remove('hidden');
+        }
+
+        function renderFlightsHub() {
+            const container = document.getElementById('flights-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            flightsList.forEach(flight => {
+                const item = document.createElement('div');
+                item.className = "p-2 bg-white rounded-xl border border-slate-200 flex items-center gap-2 text-xs";
+                item.innerHTML = `
+                    <div class="w-24 font-extrabold text-teal-800 text-[10px] flex items-center gap-1 shrink-0">
+                        <i class="fa-solid fa-plane"></i> ${flight.leg}
+                    </div>
+                    <input type="text" value="${flight.details}" onchange="updateFlightLeg(${flight.id}, this.value)" class="flex-1 p-1.5 rounded-lg border border-slate-300 bg-slate-50 font-medium text-xs">
+                    <button onclick="deleteFlightLeg(${flight.id})" class="text-slate-400 p-1"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function renderChecklists() {
+            ['baby', 'meds', 'general'].forEach(cat => {
+                const container = document.getElementById('list-' + cat);
+                const countBadge = document.getElementById('count-' + cat);
+                if (!container) return;
+                container.innerHTML = '';
+
+                const items = checklistData[cat] || [];
+                countBadge.innerText = items.length;
+
+                if (items.length === 0) {
+                    container.innerHTML = `<p class="text-slate-400 text-[10px] italic">No items.</p>`;
+                    return;
+                }
+
+                items.forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = 'flex items-center justify-between p-1 hover:bg-slate-50 rounded-lg border border-slate-100 text-xs';
+                    row.innerHTML = `
+                        <label class="flex items-center gap-2 cursor-pointer flex-1">
+                            <input type="checkbox" ${item.completed ? 'checked' : ''} onchange="toggleChecklistItem('${cat}', ${item.id})" class="rounded text-teal-600 w-4 h-4">
+                            <span class="${item.completed ? 'line-through text-slate-400' : 'text-slate-800 font-medium'} text-[11px]">${item.text}</span>
+                        </label>
+                        <button onclick="deleteChecklistItem('${cat}', ${item.id})" class="text-slate-300 p-1"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                    `;
+                    container.appendChild(row);
+                });
+            });
+        }
+
+        function renderExpenses() {
+            const container = document.getElementById('expenses-container');
+            const summaryLabel = document.getElementById('total-expense-summary');
+            if (!container) return;
+            container.innerHTML = '';
+
+            let totals = { INR: 0, MUR: 0, EUR: 0, USD: 0 };
+
+            if (expensesList.length === 0) {
+                container.innerHTML = `<p class="text-slate-400 text-[10px] italic py-1">No expenses recorded yet.</p>`;
+                summaryLabel.innerText = `₹0 | ₨0`;
+                return;
+            }
+
+            expensesList.forEach(exp => {
+                totals[exp.currency] = (totals[exp.currency] || 0) + parseFloat(exp.amount || 0);
+
+                const badgeColor = exp.currency === 'INR' ? 'bg-indigo-100 text-indigo-800' : (exp.currency === 'MUR' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800');
+                const row = document.createElement('div');
+                row.className = 'flex justify-between items-center p-2 bg-slate-50 rounded-xl border border-slate-200 text-xs';
+                row.innerHTML = `
+                    <div class="space-y-0.5">
+                        <div class="font-bold text-slate-900 text-xs">${exp.title} <span class="ml-1 text-[9px] px-1.5 py-0.5 rounded-full font-bold ${badgeColor}">${exp.category}</span></div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-black text-slate-900 text-xs">${exp.currency === 'INR' ? '₹' : (exp.currency === 'MUR' ? '₨' : (exp.currency === 'EUR' ? '€' : '$'))}${parseFloat(exp.amount).toLocaleString()}</span>
+                        <button onclick="deleteExpense(${exp.id})" class="text-slate-400 p-1"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+
+            let summaryStr = [];
+            if (totals.INR > 0) summaryStr.push(`₹${totals.INR.toLocaleString()}`);
+            if (totals.MUR > 0) summaryStr.push(`₨${totals.MUR.toLocaleString()}`);
+            if (totals.EUR > 0) summaryStr.push(`€${totals.EUR.toLocaleString()}`);
+            summaryLabel.innerText = summaryStr.join(' | ') || '₹0 | ₨0';
+        }
+
+        function saveDayEdit() {
+            const id = parseInt(document.getElementById('edit-day-id').value);
+            const day = itineraryDays.find(d => d.id === id);
+            if (!day) return;
+            day.title = document.getElementById('edit-day-title').value.trim() || day.title;
+            day.tag = document.getElementById('edit-day-tag').value.trim() || day.tag;
+            day.morningTitle = document.getElementById('edit-day-morning-title').value.trim();
+            day.morningDesc = document.getElementById('edit-day-morning-desc').value.trim();
+            day.afternoonTitle = document.getElementById('edit-day-afternoon-title').value.trim();
+            day.afternoonDesc = document.getElementById('edit-day-afternoon-desc').value.trim();
+            day.dinnerIndian = document.getElementById('edit-day-dinner-indian').value.trim();
+            day.dinnerLocal = document.getElementById('edit-day-dinner-local').value.trim();
+
+            renderItinerary();
+            closeEditDayModal();
+            saveStateToCloud();
+            showToast('Day updated & synced!');
+        }
+
+        function deleteDayFromModal() {
+            const id = parseInt(document.getElementById('edit-day-id').value);
+            itineraryDays = itineraryDays.filter(d => d.id !== id);
+            renderItinerary();
+            closeEditDayModal();
+            saveStateToCloud();
+            showToast('Day removed.');
+        }
+
+        function addCustomDay() {
+            const newId = Date.now();
+            const newDay = {
+                id: newId,
+                title: `Custom Day • ${itineraryDays.length + 1}`,
+                tag: "Extra Day",
+                icon: "fa-plus-circle",
+                morningTitle: "Morning Activity",
+                morningDesc: "Enter morning plans...",
+                afternoonTitle: "Afternoon Activity",
+                afternoonDesc: "Enter afternoon plans...",
+                dinnerIndian: "Custom Indian dinner option",
+                dinnerLocal: "Custom local dinner option"
+            };
+            itineraryDays.push(newDay);
+            renderItinerary();
+            openEditDayModal(newId);
+            saveStateToCloud();
+            showToast('New day added!');
+        }
+
+        function resetItineraryToDefault() {
+            itineraryDays = JSON.parse(JSON.stringify(defaultItineraryDays));
+            renderItinerary();
+            saveStateToCloud();
+            showToast('Reset to original itinerary!');
+        }
+
+        function saveCustomPlace() {
+            const editId = document.getElementById('edit-place-id').value;
+            const title = document.getElementById('new-place-title').value.trim();
+            const category = document.getElementById('new-place-cat').value;
+            const location = document.getElementById('new-place-loc').value.trim() || 'Mauritius';
+            const access = document.getElementById('new-place-access').value.trim() || 'General Access';
+            const desc = document.getElementById('new-place-desc').value.trim() || 'Custom added attraction.';
+
+            if (!title) {
+                showToast('Please enter an attraction name.', 'warning');
+                return;
+            }
+
+            if (editId) {
+                const place = customPlaces.find(p => p.id == editId);
+                if (place) {
+                    place.title = title;
+                    place.category = category;
+                    place.location = location;
+                    place.access = access;
+                    place.desc = desc;
+                }
+            } else {
+                customPlaces.push({ id: Date.now(), title, category, location, access, desc });
+            }
+
+            toggleAddPlaceForm();
+            renderPlaces();
+            saveStateToCloud();
+            showToast('Attraction saved!');
+        }
+
+        function deleteCustomPlace(id) {
+            customPlaces = customPlaces.filter(p => p.id !== id);
+            renderPlaces();
+            saveStateToCloud();
+            showToast('Attraction removed');
+        }
+
+        function saveCustomRestaurant() {
+            const editId = document.getElementById('edit-rest-id').value;
+            const name = document.getElementById('new-rest-name').value.trim();
+            const cuisine = document.getElementById('new-rest-cuisine').value.trim() || 'Indian / Local';
+            const location = document.getElementById('new-rest-loc').value.trim() || 'Mauritius';
+            const distance = document.getElementById('new-rest-dist').value.trim() || 'Nearby';
+            const notes = document.getElementById('new-rest-notes').value.trim() || 'Custom dining spot.';
+
+            if (!name) {
+                showToast('Please enter a restaurant name.', 'warning');
+                return;
+            }
+
+            if (editId) {
+                const rest = customRestaurants.find(r => r.id == editId);
+                if (rest) {
+                    rest.name = name;
+                    rest.cuisine = cuisine;
+                    rest.location = location;
+                    rest.distance = distance;
+                    rest.notes = notes;
+                }
+            } else {
+                customRestaurants.push({ id: Date.now(), name, cuisine, location, distance, notes });
+            }
+
+            toggleAddRestaurantForm();
+            renderRestaurants();
+            saveStateToCloud();
+            showToast('Restaurant saved!');
+        }
+
+        function deleteCustomRestaurant(id) {
+            customRestaurants = customRestaurants.filter(r => r.id !== id);
+            renderRestaurants();
+            saveStateToCloud();
+            showToast('Restaurant removed');
+        }
+
+        function addFlightLeg() {
+            const legNum = flightsList.length + 1;
+            flightsList.push({ id: Date.now(), leg: `Flight Leg ${legNum}`, details: "Flight No: ____ • Route • Date/Time" });
+            renderFlightsHub();
+            saveStateToCloud();
+        }
+
+        function updateFlightLeg(id, val) {
+            const f = flightsList.find(x => x.id === id);
+            if (f) f.details = val;
+            saveStateToCloud();
+        }
+
+        function deleteFlightLeg(id) {
+            flightsList = flightsList.filter(x => x.id !== id);
+            renderFlightsHub();
+            saveStateToCloud();
+        }
+
+        function saveHubData() {
+            const hubData = {
+                carVendor: document.getElementById('hub-car-vendor').value,
+                carSeat: document.getElementById('hub-car-seat').value,
+                hotel1Ref: document.getElementById('hub-hotel1-ref').value,
+                hotel2Ref: document.getElementById('hub-hotel2-ref').value
+            };
+            localStorage.setItem('mru_hub_data', JSON.stringify(hubData));
+            saveStateToCloud();
+            showToast('Hub Details Saved & Synced!');
+        }
+
+        function addTodoItem() {
+            const category = document.getElementById('todo-category-select').value;
+            const input = document.getElementById('input-todo-item');
+            const text = input.value.trim();
+            if (!text) {
+                showToast('Please enter an item description.', 'warning');
+                return;
+            }
+
+            if (!checklistData[category]) checklistData[category] = [];
+            checklistData[category].push({ id: Date.now(), text, completed: false });
+
+            input.value = '';
+            renderChecklists();
+            saveStateToCloud();
+            showToast('Item added!');
+        }
+
+        function toggleChecklistItem(category, id) {
+            const item = checklistData[category].find(x => x.id === id);
+            if (item) {
+                item.completed = !item.completed;
+                renderChecklists();
+                saveStateToCloud();
+            }
+        }
+
+        function deleteChecklistItem(category, id) {
+            checklistData[category] = checklistData[category].filter(x => x.id !== id);
+            renderChecklists();
+            saveStateToCloud();
+        }
+
+        function resetChecklists() {
+            Object.keys(checklistData).forEach(cat => {
+                checklistData[cat].forEach(item => item.completed = false);
+            });
+            renderChecklists();
+            saveStateToCloud();
+            showToast('Checklist reset.');
+        }
+
+        function addExpense() {
+            const title = document.getElementById('exp-title').value.trim();
+            const amount = parseFloat(document.getElementById('exp-amount').value);
+            const currency = document.getElementById('exp-currency').value;
+            const category = document.getElementById('exp-category').value;
+
+            if (!title || isNaN(amount)) {
+                showToast('Please enter valid title & amount.', 'warning');
+                return;
+            }
+
+            expensesList.push({ id: Date.now(), title, amount, currency, category });
+            document.getElementById('exp-title').value = '';
+            document.getElementById('exp-amount').value = '';
+            renderExpenses();
+            saveStateToCloud();
+            showToast('Expense recorded!');
+        }
+
+        function deleteExpense(id) {
+            expensesList = expensesList.filter(e => e.id !== id);
+            renderExpenses();
+            saveStateToCloud();
+            showToast('Expense removed.');
+        }
+
+        function clearAllExpenses() {
+            expensesList = [];
+            renderExpenses();
+            saveStateToCloud();
+            showToast('Expenses cleared.');
+        }
+
+        function editSeaplaneTime() {
+            const currentTime = document.getElementById('seaplane-time-display').innerText;
+            const defaultTime = currentTime.includes("TBD") ? "10:30 AM" : currentTime;
+            const newTime = prompt("Enter confirmed Seaplane flight slot for Oct 22nd:", defaultTime);
+            if (newTime && newTime.trim() !== "") {
+                document.getElementById('seaplane-time-display').innerText = newTime;
+                localStorage.setItem('mru_seaplane_time', newTime);
+                saveStateToCloud();
+                showToast('Seaplane slot updated!');
+            }
+        }
+
+        function openSyncModal() {
+            const dataObj = {
+                itineraryDays,
+                customPlaces,
+                customRestaurants,
+                checklistData,
+                flightsList,
+                expensesList,
+                tripId: currentTripId
+            };
+            document.getElementById('sync-data-box').value = JSON.stringify(dataObj);
+            document.getElementById('modal-sync').classList.remove('hidden');
+        }
+
+        function closeSyncModal() {
+            document.getElementById('modal-sync').classList.add('hidden');
+        }
+
+        function copySyncData() {
+            const box = document.getElementById('sync-data-box');
+            box.select();
+            document.execCommand('copy');
+            showToast('Backup code copied to clipboard!');
+        }
+
+        function importSyncDataPrompt() {
+            const code = prompt("Paste your trip backup JSON code here:");
+            if (!code) return;
+            try {
+                const parsed = JSON.parse(code);
+                if (parsed.itineraryDays) itineraryDays = parsed.itineraryDays;
+                if (parsed.customPlaces) customPlaces = parsed.customPlaces || [];
+                if (parsed.customRestaurants) customRestaurants = parsed.customRestaurants || [];
+                if (parsed.checklistData) checklistData = parsed.checklistData;
+                if (parsed.flightsList) flightsList = parsed.flightsList;
+                if (parsed.expensesList) expensesList = parsed.expensesList;
+                if (parsed.tripId) {
+                    currentTripId = parsed.tripId;
+                    localStorage.setItem('mru_trip_id', currentTripId);
+                }
+
+                renderItinerary();
+                renderPlaces();
+                renderRestaurants();
+                renderFlightsHub();
+                renderChecklists();
+                renderExpenses();
+                saveStateToCloud();
+                closeSyncModal();
+                showToast('Trip data imported successfully!');
+            } catch (err) {
+                showToast('Invalid backup code structure.', 'warning');
+            }
+        }
+
+        function changeTripId() {
+            const inputVal = document.getElementById('shared-trip-id-input').value.trim();
+            if (!inputVal) return;
+            currentTripId = inputVal;
+            localStorage.setItem('mru_trip_id', currentTripId);
+            setupRealtimeSync();
+            closeSyncModal();
+            showToast(`Connected to Family Trip Code: ${currentTripId}`);
+        }
+
+        function showToast(message, type = 'info') {
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                container.className = 'fixed bottom-16 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 pointer-events-none px-4 w-full max-w-xs';
+                document.body.appendChild(container);
+            }
+
+            const toast = document.createElement('div');
+            const bgColor = type === 'warning' ? 'bg-amber-600' : (type === 'error' ? 'bg-rose-600' : 'bg-teal-800');
+            toast.className = `${bgColor} text-white text-xs font-bold px-3 py-2.5 rounded-xl shadow-xl flex items-center justify-between gap-2 transition-all duration-300 opacity-0 translate-y-2 pointer-events-auto border border-white/20`;
+            toast.innerHTML = `<span>${message}</span><i class="fa-solid fa-xmark text-xs opacity-70 cursor-pointer" onclick="this.parentElement.remove()"></i>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-0', 'translate-y-2');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 2800);
+        }
+
+        function loadSavedData() {
+            const savedItinerary = localStorage.getItem('mru_custom_itinerary');
+            itineraryDays = savedItinerary ? JSON.parse(savedItinerary) : JSON.parse(JSON.stringify(defaultItineraryDays));
+            renderItinerary();
+
+            const savedPlaces = localStorage.getItem('mru_custom_places');
+            if (savedPlaces) customPlaces = JSON.parse(savedPlaces);
+            renderPlaces();
+
+            const savedRestaurants = localStorage.getItem('mru_custom_restaurants');
+            if (savedRestaurants) customRestaurants = JSON.parse(savedRestaurants);
+            renderRestaurants();
+
+            const savedFlights = localStorage.getItem('mru_flights');
+            if (savedFlights) flightsList = JSON.parse(savedFlights);
+            renderFlightsHub();
+
+            const savedHub = localStorage.getItem('mru_hub_data');
+            if (savedHub) {
+                const data = JSON.parse(savedHub);
+                if (data.carVendor) document.getElementById('hub-car-vendor').value = data.carVendor;
+                if (data.carSeat) document.getElementById('hub-car-seat').value = data.carSeat;
+                if (data.hotel1Ref) document.getElementById('hub-hotel1-ref').value = data.hotel1Ref;
+                if (data.hotel2Ref) document.getElementById('hub-hotel2-ref').value = data.hotel2Ref;
+            } else {
+                document.getElementById('hub-car-vendor').value = "Ebrahim Tours — Suzuki Swift Automatic @ MUR 1,600/day";
+                document.getElementById('hub-car-seat').value = "Group 1 Toddler Car Seat (@ MUR 100/day) • Total 8 Days: MUR 15,600";
+                document.getElementById('hub-hotel1-ref').value = "Oct 17 - Oct 21 (4 Nights) • Laguna Beach Hotel & Spa";
+                document.getElementById('hub-hotel2-ref').value = "Oct 21 - Oct 25 (4 Nights) • OUTRIGGER Mauritius Beach Resort";
+            }
+
+            const savedChecklistData = localStorage.getItem('mru_checklist_data');
+            if (savedChecklistData) checklistData = JSON.parse(savedChecklistData);
+            renderChecklists();
+
+            const savedExpenses = localStorage.getItem('mru_expenses');
+            if (savedExpenses) expensesList = JSON.parse(savedExpenses);
+            renderExpenses();
+
+            document.getElementById('shared-trip-id-input').value = currentTripId;
+        }
+
+        // Attach global window handlers
+        window.switchTab = switchTab;
+        window.setItineraryMode = setItineraryMode;
+        window.openEditDayModal = openEditDayModal;
+        window.closeEditDayModal = closeEditDayModal;
+        window.saveDayEdit = saveDayEdit;
+        window.deleteDayFromModal = deleteDayFromModal;
+        window.addCustomDay = addCustomDay;
+        window.resetItineraryToDefault = resetItineraryToDefault;
+        window.toggleAddPlaceForm = toggleAddPlaceForm;
+        window.saveCustomPlace = saveCustomPlace;
+        window.editCustomPlace = editCustomPlace;
+        window.deleteCustomPlace = deleteCustomPlace;
+        window.toggleAddRestaurantForm = toggleAddRestaurantForm;
+        window.saveCustomRestaurant = saveCustomRestaurant;
+        window.editCustomRestaurant = editCustomRestaurant;
+        window.deleteCustomRestaurant = deleteCustomRestaurant;
+        window.addFlightLeg = addFlightLeg;
+        window.updateFlightLeg = updateFlightLeg;
+        window.deleteFlightLeg = deleteFlightLeg;
+        window.saveHubData = saveHubData;
+        window.addTodoItem = addTodoItem;
+        window.toggleChecklistItem = toggleChecklistItem;
+        window.deleteChecklistItem = deleteChecklistItem;
+        window.resetChecklists = resetChecklists;
+        window.addExpense = addExpense;
+        window.deleteExpense = deleteExpense;
+        window.clearAllExpenses = clearAllExpenses;
+        window.filterPlaces = filterPlaces;
+        window.editSeaplaneTime = editSeaplaneTime;
+        window.openSyncModal = openSyncModal;
+        window.closeSyncModal = closeSyncModal;
+        window.copySyncData = copySyncData;
+        window.importSyncDataPrompt = importSyncDataPrompt;
+        window.changeTripId = changeTripId;
+
+        window.onload = function() {
+            loadSavedData();
+            initFirebase();
+        };
+    </script>
+</body>
+</html>
