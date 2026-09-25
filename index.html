@@ -654,13 +654,23 @@
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'mauritius-2026';
         const JSON_BLOB_API = "https://jsonblob.com/api/jsonBlob";
 
+        // Dedicated Project Firebase Credentials
+        const userFirebaseConfig = {
+            apiKey: "AIzaSyC1m9P1Y5ClzBOAGxWAYtlw5_wsfO6GzfQ",
+            authDomain: "mauritius-trip.firebaseapp.com",
+            projectId: "mauritius-trip",
+            storageBucket: "mauritius-trip.firebasestorage.app",
+            messagingSenderId: "964788291618",
+            appId: "1:964788291618:web:6197de028747085af9627b"
+        };
+
         let app, auth, db, user;
         let unsubscribeCloud = null;
         let cloudPollTimer = null;
         let currentTripId = localStorage.getItem('mru_trip_id') || 'mauritius-2026';
         let currentBlobId = localStorage.getItem('mru_blob_id_' + currentTripId) || '';
         let isCloudUpdating = false;
-        let activeSyncMode = 'cloud'; // 'firebase' | 'cloud'
+        let activeSyncMode = 'firebase'; // 'firebase' | 'cloud'
         let lastSyncTimestamp = 0;
 
         let itineraryMode = 'indian';
@@ -750,12 +760,14 @@
         async function initCloudSync() {
             checkUrlSyncHash();
 
-            // Priority 1: Check Firebase Config (Environment or Saved Custom Config)
-            let firebaseCfg = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-            if (!firebaseCfg) {
-                const savedCfg = localStorage.getItem('mru_custom_firebase_cfg');
-                if (savedCfg) {
-                    try { firebaseCfg = JSON.parse(savedCfg); } catch(e){}
+            let firebaseCfg = userFirebaseConfig;
+            if (!firebaseCfg || !firebaseCfg.apiKey) {
+                firebaseCfg = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+                if (!firebaseCfg) {
+                    const savedCfg = localStorage.getItem('mru_custom_firebase_cfg');
+                    if (savedCfg) {
+                        try { firebaseCfg = JSON.parse(savedCfg); } catch(e){}
+                    }
                 }
             }
 
@@ -775,7 +787,7 @@
                     const authToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
                     if (authToken) {
                         await signInWithCustomToken(auth, authToken);
-                    } else {
+                    } else if (!auth.currentUser) {
                         await signInAnonymously(auth);
                     }
 
@@ -792,7 +804,7 @@
                 }
             }
 
-            // Priority 2: Universal Web Sync (Works on GitHub Pages out-of-the-box)
+            // Priority 2: Universal Web Sync (Fallback)
             activeSyncMode = 'cloud';
             updateEngineBadge('Universal Web Sync');
             startUniversalCloudPolling();
@@ -804,8 +816,7 @@
 
             setSyncStatus("Syncing...", "teal");
             
-            // Strict Path: /artifacts/{appId}/public/data/trips/{currentTripId}
-            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'trips', currentTripId);
+            const docRef = doc(db, 'trips', currentTripId);
 
             unsubscribeCloud = onSnapshot(docRef, (docSnap) => {
                 if (docSnap.exists()) {
@@ -911,10 +922,9 @@
                 lastUpdatedTimestamp: nowTs
             };
 
-            // Save to Firestore if Firebase mode is active
             if (activeSyncMode === 'firebase' && db && auth.currentUser) {
                 try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'trips', currentTripId);
+                    const docRef = doc(db, 'trips', currentTripId);
                     await setDoc(docRef, payload, { merge: true });
                     setSyncStatus("Live Synced", "emerald");
                     return;
