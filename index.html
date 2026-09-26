@@ -58,6 +58,13 @@
         .animate-slide-up {
             animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.2s ease-out forwards;
+        }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen pb-28 selection:bg-teal-500 selection:text-white">
@@ -97,7 +104,6 @@
 
     <main class="max-w-2xl mx-auto px-3 py-3 space-y-4">
 
-        <!-- VIEW 1: ITINERARY -->
         <section id="view-itinerary" class="tab-content space-y-3">
             <div class="bg-gradient-to-r from-slate-900 to-teal-950 text-white p-3.5 rounded-2xl shadow-sm space-y-2">
                 <div class="flex justify-between items-center">
@@ -150,7 +156,6 @@
             <div id="itinerary-cards-container" class="space-y-3"></div>
         </section>
 
-        <!-- VIEW 2: PLACES & ATTRACTIONS -->
         <section id="view-places" class="tab-content hidden space-y-3">
             <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
                 <div class="flex justify-between items-center">
@@ -212,7 +217,6 @@
             <div id="places-container" class="space-y-3"></div>
         </section>
 
-        <!-- VIEW 3: RESTAURANTS & FOOD -->
         <section id="view-restaurants" class="tab-content hidden space-y-3">
             <div class="bg-amber-50/90 p-3.5 rounded-2xl border border-amber-200/90 flex justify-between items-center">
                 <div>
@@ -263,7 +267,6 @@
             <div id="restaurants-container" class="space-y-3"></div>
         </section>
 
-        <!-- VIEW 4: BOOKING HUB -->
         <section id="view-hub" class="tab-content hidden space-y-3">
             <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
                 <div class="border-b border-slate-100 pb-2.5 flex justify-between items-center">
@@ -290,59 +293,39 @@
 
                 <div class="bg-amber-50/70 p-3 rounded-xl border border-amber-200 space-y-2 text-xs">
                     <h3 class="font-extrabold text-amber-950 text-[10px] uppercase tracking-wider flex items-center justify-between">
-                        <span><i class="fa-solid fa-car mr-1 text-amber-600"></i> Car Rental (Ebrahim Tours)</span>
-                        <span class="text-[9px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full font-black">MUR 15,600</span>
+                        <span><i class="fa-solid fa-car text-amber-600 mr-1"></i> Finalized Car Rental (Ebrahim Tours)</span>
+                        <span class="bg-amber-200 text-amber-950 px-2 py-0.5 rounded-full text-[9px] font-black">MUR 15,600</span>
                     </h3>
-                    <div>
-                        <label class="block text-slate-600 font-semibold text-[10px] mb-1">Car Model & Vendor</label>
-                        <input type="text" id="hub-car-vendor" class="w-full p-2 rounded-lg border border-slate-300 bg-white text-xs font-bold text-slate-800" value="Suzuki Swift (Automatic) - Ebrahim Tours">
+                    <p class="text-[11px] text-slate-700 font-medium">Suzuki Swift Automatic + Toddler Car Seat (Group 1)</p>
+                    <div class="text-[10px] text-slate-600 space-y-1 bg-white p-2.5 rounded-lg border border-amber-200">
+                        <div>📍 <strong>Delivery:</strong> Oct 17 @ 10:00 AM — Laguna Beach Hotel</div>
+                        <div>📍 <strong>Collection:</strong> Oct 24 @ 5:00 PM — OUTRIGGER Resort</div>
+                        <div>💳 <strong>Payment:</strong> Cash/Card on delivery (0 Deposit Paid)</div>
+                        <div>🛡️ <strong>Insurance:</strong> Full Comprehensive • MUR 20,000 Excess Hold</div>
                     </div>
-                    <div>
-                        <label class="block text-slate-600 font-semibold text-[10px] mb-1">Child Seat & Terms</label>
-                        <input type="text" id="hub-car-seat" class="w-full p-2 rounded-lg border border-slate-300 bg-white text-xs font-semibold text-teal-700" value="Includes 1 Group 1 Toddler Car Seat • Deliver Oct 17 @ Laguna, Collect Oct 24 @ Outrigger">
-                    </div>
-                </div>
-
-                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2 text-xs">
-                    <h3 class="font-extrabold text-slate-900 text-[10px] uppercase tracking-wider text-amber-800"><i class="fa-solid fa-hotel mr-1"></i> Resort 1: Laguna Beach Hotel</h3>
-                    <textarea id="hub-hotel1-ref" rows="2" class="w-full p-2 rounded-lg border border-slate-300 bg-white text-xs" placeholder="Confirmation # / Notes..."></textarea>
-                </div>
-
-                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2 text-xs">
-                    <h3 class="font-extrabold text-slate-900 text-[10px] uppercase tracking-wider text-teal-800"><i class="fa-solid fa-hotel mr-1"></i> Resort 2: OUTRIGGER Resort</h3>
-                    <textarea id="hub-hotel2-ref" rows="2" class="w-full p-2 rounded-lg border border-slate-300 bg-white text-xs" placeholder="Confirmation # / Notes..."></textarea>
                 </div>
             </div>
         </section>
 
-        <!-- VIEW 5: TO-DO & CHECKLIST -->
         <section id="view-todo" class="tab-content hidden space-y-3">
-            <div class="bg-gradient-to-r from-teal-800 to-emerald-800 text-white p-3.5 rounded-2xl shadow-xs flex justify-between items-center">
-                <div>
-                    <h2 class="text-xs font-black"><i class="fa-solid fa-list-check text-amber-300 mr-1.5"></i>Pre-Trip Checklist</h2>
-                    <p class="text-[10px] text-teal-100">Tap items to mark done as you pack</p>
-                </div>
-                <button onclick="resetChecklists()" class="btn-touch text-[10px] bg-white/10 text-white px-2.5 py-1 rounded-xl border border-white/20 font-bold">
-                    Uncheck All
-                </button>
-            </div>
-
-            <div class="bg-white p-3 rounded-2xl border border-slate-200 shadow-xs space-y-2">
-                <h3 class="font-bold text-slate-900 text-[10px] uppercase tracking-wider text-teal-700"><i class="fa-solid fa-plus-circle mr-1"></i> Add Packing or Task Item</h3>
-                <div class="space-y-2">
-                    <select id="todo-category-select" class="w-full text-xs p-2 rounded-xl border border-slate-200 bg-slate-50 font-bold">
-                        <option value="baby">👶 Toddler Beach & Daily Essentials</option>
-                        <option value="meds">💊 Meds, Snacks & Travel Docs</option>
-                        <option value="general">🛍️ General Prep & Driving License</option>
-                    </select>
-                    <div class="flex gap-2">
-                        <input type="text" id="input-todo-item" placeholder="e.g. Send updated physical driving license photo to Hannah..." class="flex-1 text-xs p-2 rounded-xl border border-slate-200 bg-slate-50">
-                        <button onclick="addTodoItem()" class="btn-touch bg-teal-700 text-white px-3 py-2 rounded-xl text-xs font-bold shadow-xs">Add</button>
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                <div class="border-b pb-2 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xs font-black text-slate-900"><i class="fa-solid fa-list-check text-teal-600 mr-1.5"></i>Pre-Trip & Packing Checklists</h2>
+                        <p class="text-[10px] text-slate-500">Tap items to check off as you pack</p>
                     </div>
                 </div>
-            </div>
 
-            <div class="space-y-3">
+                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex gap-2">
+                    <input type="text" id="new-todo-text" placeholder="Add custom item..." class="flex-1 p-2 rounded-lg border border-slate-300 text-xs bg-white">
+                    <select id="new-todo-cat" class="p-2 rounded-lg border border-slate-300 text-xs bg-white font-bold">
+                        <option value="baby">👶 Toddler & Beach</option>
+                        <option value="meds">💊 Meds & Docs</option>
+                        <option value="general">🧳 General</option>
+                    </select>
+                    <button onclick="addChecklistItem()" class="btn-touch px-3 py-2 bg-teal-700 text-white rounded-lg text-xs font-bold">Add</button>
+                </div>
+
                 <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
                     <h3 class="font-bold text-slate-900 text-[10px] uppercase tracking-wider text-teal-800 border-b pb-1.5 flex justify-between items-center">
                         <span><i class="fa-solid fa-baby-carriage text-teal-600 mr-1"></i> Toddler Beach & Daily</span>
@@ -369,31 +352,60 @@
             </div>
         </section>
 
-        <!-- VIEW 6: EXPENSES TRACKER -->
         <section id="view-expenses" class="tab-content hidden space-y-3">
-            <div class="bg-gradient-to-r from-amber-600 to-amber-800 text-white p-3.5 rounded-2xl shadow-xs space-y-2">
+            <div class="bg-gradient-to-r from-amber-600 via-amber-700 to-amber-900 text-white p-3.5 rounded-2xl shadow-xs space-y-2.5">
                 <div class="flex justify-between items-center border-b border-amber-500/40 pb-2">
                     <div>
-                        <h2 class="text-xs font-black flex items-center gap-1.5"><i class="fa-solid fa-wallet text-amber-200"></i>Trip Expense & Payment Tracker</h2>
-                        <p class="text-[10px] text-amber-100">Track total costs, advance deposits paid & balance owed</p>
+                        <h2 class="text-xs font-black flex items-center gap-1.5"><i class="fa-solid fa-wallet text-amber-200"></i>Trip Budget & Expense Tracker</h2>
+                        <p class="text-[10px] text-amber-100">Live costs, balances owed & total spend in Indian Rupees (₹)</p>
+                    </div>
+                    <button onclick="toggleForexSettings()" class="btn-touch px-2 py-1 rounded-lg bg-amber-950/60 border border-amber-400/40 text-[9px] font-bold text-amber-200 flex items-center gap-1">
+                        <i class="fa-solid fa-coins text-amber-300"></i> Rates Config
+                    </button>
+                </div>
+
+                <!-- FOREX RATES EDITING PANEL (COLLAPSIBLE) -->
+                <div id="forex-rates-panel" class="hidden bg-amber-950/80 p-2.5 rounded-xl border border-amber-400/30 text-[10px] space-y-2">
+                    <div class="font-bold text-amber-200 flex justify-between items-center">
+                        <span><i class="fa-solid fa-calculator mr-1"></i> Adjust Currency Conversion Rates (to ₹ INR)</span>
+                        <button onclick="updateForexRates()" class="btn-touch px-2 py-0.5 bg-amber-500 text-slate-950 rounded font-bold text-[9px]">Save Rates</button>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div>
+                            <label class="block text-[8px] text-amber-200 font-semibold mb-0.5">1 MUR (₨) = ₹</label>
+                            <input type="number" step="0.01" id="rate-mur" value="1.83" class="w-full p-1.5 rounded-lg bg-amber-900/80 border border-amber-500/40 text-white font-bold text-xs">
+                        </div>
+                        <div>
+                            <label class="block text-[8px] text-amber-200 font-semibold mb-0.5">1 USD ($) = ₹</label>
+                            <input type="number" step="0.1" id="rate-usd" value="84.00" class="w-full p-1.5 rounded-lg bg-amber-900/80 border border-amber-500/40 text-white font-bold text-xs">
+                        </div>
+                        <div>
+                            <label class="block text-[8px] text-amber-200 font-semibold mb-0.5">1 EUR (€) = ₹</label>
+                            <input type="number" step="0.1" id="rate-eur" value="91.00" class="w-full p-1.5 rounded-lg bg-amber-900/80 border border-amber-500/40 text-white font-bold text-xs">
+                        </div>
                     </div>
                 </div>
+
                 <div class="grid grid-cols-3 gap-1.5 text-center text-[10px] pt-0.5">
-                    <div class="bg-amber-950/40 p-2 rounded-xl border border-amber-400/30">
-                        <div class="text-[8px] uppercase font-bold text-amber-200">Total Cost</div>
-                        <div id="summary-total-cost" class="text-[11px] font-black text-white mt-0.5">₹0 | ₨0</div>
+                    <div class="bg-amber-950/50 p-2 rounded-xl border border-amber-400/30">
+                        <div class="text-[8px] uppercase font-bold text-amber-200">Total Cost (₹)</div>
+                        <div id="summary-grand-total-inr" class="text-[12px] font-black text-amber-200 mt-0.5">₹0</div>
+                        <div id="summary-total-cost" class="text-[8px] text-slate-300 mt-0.5">₨0 | $0</div>
                     </div>
                     <div class="bg-emerald-950/50 p-2 rounded-xl border border-emerald-400/30">
-                        <div class="text-[8px] uppercase font-bold text-emerald-200">Paid So Far</div>
-                        <div id="summary-total-paid" class="text-[11px] font-black text-emerald-300 mt-0.5">₹0 | ₨0</div>
+                        <div class="text-[8px] uppercase font-bold text-emerald-200">Paid So Far (₹)</div>
+                        <div id="summary-grand-paid-inr" class="text-[12px] font-black text-emerald-300 mt-0.5">₹0</div>
+                        <div id="summary-total-paid" class="text-[8px] text-emerald-200/80 mt-0.5">₨0 | $0</div>
                     </div>
                     <div class="bg-rose-950/50 p-2 rounded-xl border border-rose-400/30">
-                        <div class="text-[8px] uppercase font-bold text-rose-200">Balance Owed</div>
-                        <div id="summary-total-due" class="text-[11px] font-black text-rose-300 mt-0.5">₹0 | ₨0</div>
+                        <div class="text-[8px] uppercase font-bold text-rose-200">Balance Owed (₹)</div>
+                        <div id="summary-grand-due-inr" class="text-[12px] font-black text-rose-300 mt-0.5">₹0</div>
+                        <div id="summary-total-due" class="text-[8px] text-rose-200/80 mt-0.5">₨0 | $0</div>
                     </div>
                 </div>
             </div>
 
+            <!-- RECORD EXPENSE / BOOKING FORM -->
             <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
                 <h3 class="font-bold text-slate-900 text-[10px] uppercase tracking-wider text-amber-800 border-b pb-1"><i class="fa-solid fa-plus-circle mr-1"></i> Record Expense / Booking Entry</h3>
                 <div class="space-y-2 text-xs">
@@ -449,7 +461,6 @@
             </div>
         </section>
 
-        <!-- VIEW 7: SAFETY & DRIVING -->
         <section id="view-contacts" class="tab-content hidden space-y-3">
             <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
                 <h2 class="text-xs font-black text-rose-700 border-b pb-2 flex items-center gap-1.5">
@@ -494,7 +505,6 @@
 
     </main>
 
-    <!-- EDIT DAY MODAL -->
     <div id="modal-edit-day" class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-lg w-full p-4 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto text-xs animate-slide-up">
             <div class="flex justify-between items-center border-b pb-2 sticky top-0 bg-white z-10">
@@ -546,7 +556,6 @@
         </div>
     </div>
 
-    <!-- SYNC & SHARE DATA MODAL -->
     <div id="modal-sync" class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full p-4 shadow-2xl space-y-3 animate-slide-up text-xs">
             <div class="flex justify-between items-center border-b pb-2">
@@ -564,15 +573,8 @@
                 <p id="sync-engine-desc" class="text-[10px] text-teal-800">Your updates sync live across your phone and your wife's phone on GitHub Pages in real time!</p>
             </div>
 
-            <div id="firebase-diagnostic-box" class="hidden p-2.5 bg-amber-50 rounded-xl border border-amber-300 text-[10px] text-amber-950 space-y-1">
-                <p class="font-bold flex items-center gap-1 text-amber-800">
-                    <i class="fa-solid fa-circle-exclamation text-amber-600"></i> <span id="diag-title">Firebase Status Check</span>
-                </p>
-                <p id="diag-msg" class="text-[9px]">Connecting to Firebase...</p>
-            </div>
-
             <div>
-                <label class="block font-bold text-slate-700 text-[10px] mb-1">Shared Family Trip Code / Blob ID</label>
+                <label class="block font-bold text-slate-700 text-[10px] mb-1">Shared Family Trip Code</label>
                 <div class="flex gap-2">
                     <input type="text" id="shared-trip-id-input" value="mauritius-2026" class="flex-1 p-2 rounded-xl border border-slate-300 font-mono font-bold text-xs bg-slate-50">
                     <button onclick="changeTripId()" class="btn-touch px-3 py-2 bg-teal-700 text-white rounded-xl font-bold text-xs">Connect</button>
@@ -592,27 +594,9 @@
                     </button>
                 </div>
             </div>
-
-            <div class="border-t pt-2 space-y-1.5">
-                <details class="text-[10px] text-slate-600">
-                    <summary class="font-bold cursor-pointer text-slate-700 hover:text-teal-700">Advanced: Custom Firebase / JSON Backup</summary>
-                    <div class="mt-2 space-y-2">
-                        <textarea id="sync-data-box" rows="2" class="w-full p-2 rounded-xl border border-slate-300 font-mono text-[9px] bg-slate-50 select-all" placeholder="Paste backup JSON or Custom Firebase Config..."></textarea>
-                        <div class="flex gap-2">
-                            <button onclick="importSyncDataPrompt()" class="btn-touch w-full py-1.5 bg-amber-500 text-slate-950 rounded-xl font-bold flex items-center justify-center gap-1">
-                                <i class="fa-solid fa-file-import"></i> Import Backup Code
-                            </button>
-                            <button onclick="saveCustomFirebaseConfig()" class="btn-touch w-full py-1.5 bg-indigo-600 text-white rounded-xl font-bold flex items-center justify-center gap-1">
-                                <i class="fa-solid fa-key"></i> Save Firebase Config
-                            </button>
-                        </div>
-                    </div>
-                </details>
-            </div>
         </div>
     </div>
 
-    <!-- MOBILE STICKY BOTTOM NAVIGATION BAR -->
     <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 z-40 pb-safe shadow-[0_-4px_16px_rgba(0,0,0,0.08)]">
         <div class="flex overflow-x-auto hide-scrollbar px-1 py-1.5 scroll-smooth justify-between items-center text-center">
             <button onclick="switchTab('itinerary')" id="mob-itinerary" class="btn-touch flex-1 min-w-[52px] py-1 text-teal-700 flex flex-col items-center gap-1 font-bold">
@@ -648,13 +632,11 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'mauritius-2026';
-        const JSON_BLOB_API = "https://jsonblob.com/api/jsonBlob";
-
-        const userFirebaseConfig = {
+        // Firebase Configuration
+        const firebaseConfig = {
             apiKey: "AIzaSyC1m9P1Y5ClzBOAGxWAYtlw5_wsfO6GzfQ",
             authDomain: "mauritius-trip.firebaseapp.com",
             projectId: "mauritius-trip",
@@ -663,19 +645,153 @@
             appId: "1:964788291618:web:6197de028747085af9627b"
         };
 
-        let app, auth, db, user;
+        const JSON_BLOB_API = "https://jsonblob.com/api/jsonBlob";
+
+        let app, auth, db;
         let unsubscribeCloud = null;
         let cloudPollTimer = null;
         let currentTripId = localStorage.getItem('mru_trip_id') || 'mauritius-2026';
         let currentBlobId = localStorage.getItem('mru_blob_id_' + currentTripId) || '';
         let isCloudUpdating = false;
         let activeSyncMode = 'firebase';
-        let lastSyncTimestamp = 0;
 
         let itineraryMode = 'indian';
         let customPlaces = [];
         let customRestaurants = [];
-        
+
+        // Exchange Rates State
+        let forexRates = {
+            MUR: 1.83,
+            USD: 84.00,
+            EUR: 91.00,
+            INR: 1.00
+        };
+
+        // Default Itinerary Data
+        let defaultItineraryDays = [
+            {
+                id: 1,
+                date: "Day 1 • Oct 17",
+                locationTag: "East Coast • Laguna Beach",
+                morningTitle: "Arrival at SSR Airport & Car Handover",
+                morningDesc: "Arrive in Mauritius AM. Meet Ebrahim Tours driver at arrival hall. Inspect Suzuki Swift + Group 1 Toddler Seat. Drive 35 mins to Laguna Beach Hotel.",
+                afternoonTitle: "Hotel Check-In & Beach Relaxation",
+                afternoonDesc: "Check-in at Laguna Beach Hotel & Spa. Unpack, let toddler rest, explore resort beach lagoon.",
+                dinnerIndian: "Laguna Beach Resort Buffet (Chef request: Mild Khichdi / Dosa for toddler) or Namaste Restaurant (~15 mins drive).",
+                dinnerLocal: "Sardine Latanier at Resort or local seafood at Trou d'Eau Douce village."
+            },
+            {
+                id: 2,
+                date: "Day 2 • Oct 18",
+                locationTag: "East Coast • Île aux Cerfs",
+                morningTitle: "Île aux Cerfs Speedboat / Catamaran",
+                morningDesc: "Short 10-min drive to Trou d'Eau Douce jetty. Boat ride to Île aux Cerfs Island. Shallow, warm lagoon waters perfect for toddler splash pool.",
+                afternoonTitle: "Shaded Pine Tree Relaxation & Beach",
+                afternoonDesc: "Relax under natural pine tree shade. Swim in calm shallow waters. Return to hotel by 3:30 PM for toddler nap.",
+                dinnerIndian: "Namaste Restaurant or Le Chaumiere (Indian curry & mild rice options).",
+                dinnerLocal: "Chez Tino (Trou d'Eau Douce) - Fresh grilled fish & local Mauritian snacks."
+            },
+            {
+                id: 3,
+                date: "Day 3 • Oct 19",
+                locationTag: "North / Port Louis",
+                morningTitle: "SSR Botanical Garden (Pamplemousses)",
+                morningDesc: "Flat, shaded, stroller-friendly paths under giant tree canopies. See giant Amazon water lilies and tortoise enclosures.",
+                afternoonTitle: "Caudan Waterfront & Odysseo Oceanarium",
+                afternoonDesc: "Drive 20 mins to Port Louis. Walk umbrella street at Caudan Waterfront. Visit air-conditioned Odysseo Oceanarium (giant glass tunnel with stingrays & sharks).",
+                dinnerIndian: "Delhi Taj / Mumbai Spices (Caudan Waterfront) - Authentic North/South Indian.",
+                dinnerLocal: "Sunset Cafe at Caudan or Lambic Restaurant."
+            },
+            {
+                id: 4,
+                date: "Day 4 • Oct 20",
+                locationTag: "East Coast • Belle Mare",
+                morningTitle: "Flacq Open Air Market",
+                morningDesc: "Experience vibrant local market with fresh fruits, tropical snacks, and souvenirs.",
+                afternoonTitle: "Belle Mare Public Beach",
+                afternoonDesc: "White powder sand beach with calm waters. Great for building sandcastles with your daughter.",
+                dinnerIndian: "Resort Indian Buffet Special or Saffron (Prince Maurice).",
+                dinnerLocal: "Le Pescatore or beachside local food stalls."
+            },
+            {
+                id: 5,
+                date: "Day 5 • Oct 21",
+                locationTag: "Resort Transfer • East to South Coast",
+                morningTitle: "Grand Bassin (Ganga Talao)",
+                morningDesc: "Checkout Laguna Beach. Drive scenic central route to Ganga Talao sacred crater lake. See giant 108ft Shiva & Durga statues.",
+                afternoonTitle: "Tea Route & Check-in OUTRIGGER Resort",
+                afternoonDesc: "Visit Bois Chéri Tea Factory or Rochester Falls lookout. Arrive at OUTRIGGER Mauritius Beach Resort (Bel Ombre, South Coast). Check-in & unpack.",
+                dinnerIndian: "Mercado Restaurant at OUTRIGGER (Live Indian cooking station).",
+                dinnerLocal: "Willie's Rum & Grill or Bel Ombre Seafood."
+            },
+            {
+                id: 6,
+                date: "Day 6 • Oct 22",
+                locationTag: "South Coast • Tortoises & Views",
+                morningTitle: "La Vanille Nature Park (Giant Tortoises)",
+                morningDesc: "Top toddler experience! Touch & feed giant Aldabra tortoises roaming freely in a shaded, tropical paved park.",
+                afternoonTitle: "Gris Gris Viewpoint & Resort Pool",
+                afternoonDesc: "Drive 10 mins to Gris Gris cliff viewpoint ('Crying Rock'). Return to OUTRIGGER for toddler pool play.",
+                dinnerIndian: "Zaika Indian Restaurant (South) or Mercado at OUTRIGGER.",
+                dinnerLocal: "Le Capitaine South or Enso Restaurant."
+            },
+            {
+                id: 7,
+                date: "Day 7 • Oct 23",
+                locationTag: "South West • Chamarel",
+                morningTitle: "Chamarel Seven Colored Earth Geopark",
+                morningDesc: "Paved boardwalks, 7-colored volcanic sand dunes, Chamarel Waterfall viewpoint, and giant tortoises.",
+                afternoonTitle: "Maconde Hairpin Viewpoint",
+                afternoonDesc: "Drive coastal route past Maconde viewpoint hairpin curve. Scenic coastal photo spot.",
+                dinnerIndian: "Mercado Restaurant (OUTRIGGER) - Indian Chef Special.",
+                dinnerLocal: "Le Palais de Barbizon (Chamarel village local creole buffet)."
+            },
+            {
+                id: 8,
+                date: "Day 8 • Oct 24",
+                locationTag: "South Coast • Blue Bay",
+                morningTitle: "Blue Bay Marine Park Glass Bottom Boat",
+                morningDesc: "Glass-bottom boat ride over marine reserve. Toddler can see coral reef fish through glass without swimming.",
+                afternoonTitle: "Resort Packing & Car Return (5:00 PM)",
+                afternoonDesc: "Relax at OUTRIGGER. Ebrahim Tours driver collects Suzuki Swift at 5:00 PM at resort lobby.",
+                dinnerIndian: "OUTRIGGER Resort Farewell Dinner.",
+                dinnerLocal: "The Edge Restaurant Bel Ombre."
+            },
+            {
+                id: 9,
+                date: "Day 9 • Oct 25",
+                locationTag: "Departure Day",
+                morningTitle: "Hotel Checkout & Package Airport Transfer",
+                morningDesc: "Enjoy final breakfast at OUTRIGGER. Included package transfer takes you to SSR Airport (MRU) for return flight.",
+                afternoonTitle: "Flight Back Home",
+                afternoonDesc: "Board flight home with wonderful Mauritius memories!",
+                dinnerIndian: "In-flight catering.",
+                dinnerLocal: "In-flight catering."
+            }
+        ];
+
+        let itineraryDays = [...defaultItineraryDays];
+
+        let defaultPlaces = [
+            { id: 1, title: "La Vanille Nature Park", cat: "baby", loc: "South Coast", access: "Paved & Shaded Paths", desc: "Top toddler spot! Touch & feed giant tortoises. Smooth stroller paths." },
+            { id: 2, title: "Île aux Cerfs Island", cat: "baby", loc: "East Coast", access: "Boat Transfer Required", desc: "Shallow, calm turquoise water. Pine tree shade for kids." },
+            { id: 3, title: "SSR Botanical Garden", cat: "baby", loc: "Pamplemousses", access: "Flat Gravel Paths", desc: "Giant water lilies, mahogany trees, shaded stroller walk." },
+            { id: 4, title: "Chamarel 7 Colored Earth", cat: "baby", loc: "Chamarel", access: "Wooden Boardwalks", desc: "Volcanic sand dunes, waterfall viewpoint, tortosie pen." },
+            { id: 5, title: "Odysseo Oceanarium & Caudan", cat: "baby", loc: "Port Louis", access: "100% Indoor & AC", desc: "Indoor aquarium, underwater glass tunnel, umbrella street." },
+            { id: 6, title: "Blue Bay Marine Park", cat: "baby", loc: "Blue Bay", access: "Glass Bottom Boat", desc: "View marine life safely through glass boat floor." },
+            { id: 7, title: "Grand Bassin (Ganga Talao)", cat: "baby", loc: "Central", access: "Paved Courtyard", desc: "Sacred crater lake, temples, 108ft Shiva & Durga statues." },
+            { id: 8, title: "Le Morne Brabant Mountain", cat: "adult", loc: "South West", access: "Steep Rock Scramble", desc: "⚠️ Dangerous cliff drops & steep climbing. Skip with toddler." },
+            { id: 9, title: "Tamarin Falls / 7 Cascades", cat: "adult", loc: "Central", access: "Slippery Jungle Trail", desc: "⚠️ Muddy ravines & river crossings. Skip with toddler." },
+            { id: 10, title: "Gris Gris Beach (Crying Rock)", cat: "adult", loc: "South Coast", access: "Cliff Viewpoint Only", desc: "⚠️ Rough ocean & strong currents. Viewpoint is fine, hold toddler." }
+        ];
+
+        let defaultRestaurants = [
+            { id: 1, name: "Namaste Restaurant", cuisine: "North & South Indian", loc: "Trou d'Eau Douce", dist: "~15 mins drive from Laguna Beach", notes: "Mild butter chicken, dal, roti. Toddler friendly seating." },
+            { id: 2, name: "Delhi Taj / Mumbai Spices", cuisine: "Indian / Veg Options", loc: "Caudan Waterfront", dist: "Port Louis Trip", notes: "Air-conditioned indoor dining, mild khichdi & rice." },
+            { id: 3, name: "Mercado (OUTRIGGER)", cuisine: "Live Indian Station", loc: "Bel Ombre", dist: "At OUTRIGGER Resort", notes: "Resident Indian Chef. Can request custom mild toddler food." },
+            { id: 4, name: "Zaika Indian Restaurant", cuisine: "Authentic Indian", loc: "South Coast", dist: "~10 mins from OUTRIGGER", notes: "Great family ambience, high chairs available." }
+        ];
+
         let checklistData = {
             baby: [
                 { id: 1, text: "Water Shoes / Reef Shoes (Toddler & Adults)", completed: false },
@@ -708,179 +824,76 @@
             { id: 4, leg: "Return Leg 2", details: "Flight No: ____ • Hub to Home City • Date: Oct 25" }
         ];
 
-        let expensesList = [];
-
-        const defaultItineraryDays = [
-            { id: 1, title: "Day 1: Oct 17 (Sat) - Arrival & East Coast Check-in", tag: "East Coast • Laguna Beach", morningTitle: "Flight Arrival & Resort Transfer", morningDesc: "Land at SSR Airport (MRU) AM. Included package transfer van takes family & bags directly to Laguna Beach Hotel & Spa.", afternoonTitle: "Resort Car Delivery & Beach Rest", afternoonDesc: "Ebrahim Tours delivers Suzuki Swift + Toddler Seat to hotel @ 10 AM. Relax on the beach, pre-cool car AC.", dinnerIndian: "Laguna Beach Indian Buffet or Le Sunshine (Trou d'Eau Douce) for mild paneer & dal.", dinnerLocal: "Resort Lagoon Restaurant or Star Fish Restaurant." },
-            { id: 2, title: "Day 2: Oct 18 (Sun) - Île aux Cerfs Lagoon Day", tag: "East Coast • Island Day", morningTitle: "Speedboat / Catamaran to Île aux Cerfs", morningDesc: "Short 10-min boat ride from Trou d'Eau Douce. Shallow turquoise lagoon pool perfect for toddler splash.", afternoonTitle: "Shaded Pine Tree Relaxation & Beach", afternoonDesc: "Enjoy shallow beach waters with rashguards and swim diapers.", dinnerIndian: "Namaste Restaurant or Resort Indian spread.", dinnerLocal: "Beachside Grill at Île aux Cerfs or Chez Tino." },
-            { id: 3, title: "Day 3: Oct 19 (Mon) - Botanical Garden & Odysseo Aquarium", tag: "North Coast • Port Louis", morningTitle: "SSR Botanical Garden (Pamplemousses)", morningDesc: "Flat, shaded, stroller-accessible walk to view giant Amazon water lilies and mahogany trees.", afternoonTitle: "Odysseo Oceanarium & Caudan Waterfront", afternoonDesc: "100% AC underwater oceanarium with stingrays and sharks. Walk along umbrella street at Caudan.", dinnerIndian: "Happy Rajah (Grand Baie) or Delhi Taj.", dinnerLocal: "Caudan Waterfront Food Court." },
-            { id: 4, title: "Day 4: Oct 20 (Tue) - Blue Bay Glass Boat & South East", tag: "South East Coast", morningTitle: "Blue Bay Marine Park Glass Boat Tour", morningDesc: "Watch fish through glass floor in calm shallow marine bay.", afternoonTitle: "Pointe d'Esny Beach Relaxation", afternoonDesc: "Soft white sand beach with gentle shallow water.", dinnerIndian: "Resort Indian options.", dinnerLocal: "Le Capitaine or Chapeau La Paille." },
-            { id: 5, title: "Day 5: Oct 21 (Wed) - Hotel Shift & Tortoise Park En Route", tag: "East -> South Coast Shift", morningTitle: "Check-out Laguna Beach & Drive South", morningDesc: "Load 1 suitcase in boot, 1 in rear seat beside toddler. Stop en route at La Vanille Nature Park.", afternoonTitle: "La Vanille Nature Park (Giant Tortoises)", afternoonDesc: "Shaded stroller paths. Feed giant Aldabra tortoises! Check into OUTRIGGER Mauritius Resort PM.", dinnerIndian: "The Plantation Club / Edgewater Indian selections at Outrigger.", dinnerLocal: "Edgewater Restaurant at Outrigger." },
-            { id: 6, title: "Day 6: Oct 22 (Thu) - Chamarel 7 Colored Earth Geopark", tag: "South West Mountains", morningTitle: "Chamarel Seven Colored Earth & Waterfall", morningDesc: "Paved wooden boardwalks to see natural 7-colored sand dunes and giant tortoise enclosure.", afternoonTitle: "Le Morne Lagoon Viewpoint & Beach", afternoonDesc: "Calm shallow waters under iconic Le Morne mountain backdrop.", dinnerIndian: "Zari Indian / Resort Curry Night.", dinnerLocal: "Le Capitaine or Wapalapam." },
-            { id: 7, title: "Day 7: Oct 23 (Fri) - Sacred Lake & Grand Bassin", tag: "Central Plateau", morningTitle: "Grand Bassin (Ganga Talao)", morningDesc: "Sacred crater lake, Shiva and Durga statues, peaceful paved courtyards.", afternoonTitle: "Trou aux Cerfs Volcanic Crater Drive", afternoonDesc: "Scenic panoramic drive-up viewpoint over dormant volcano crater.", dinnerIndian: "Resort Indian options.", dinnerLocal: "Outrigger Beachside Grill." },
-            { id: 8, title: "Day 8: Oct 24 (Sat) - Resort Pool, Spa & Car Return", tag: "Outrigger Resort", morningTitle: "Outrigger Toddler Pool & Beach Day", morningDesc: "Enjoy resort kids amenities, pool, and quiet beach walks.", afternoonTitle: "Car Rental Collection @ 17:00 PM", afternoonDesc: "Ebrahim Tours driver collects Suzuki Swift from Outrigger reception.", dinnerIndian: "Special Farewell Dinner at Outrigger.", dinnerLocal: "Special Farewell Dinner at Outrigger." },
-            { id: 9, title: "Day 9: Oct 25 (Sun) - Flight Departure Back Home", tag: "Departure", morningTitle: "Check-out & Airport Transfer", morningDesc: "Package 7-seater transfer van collects family & suitcases from Outrigger for SSR Airport.", afternoonTitle: "Board Return Flight", afternoonDesc: "Safe journey home with wonderful Mauritius family memories!", dinnerIndian: "In-Flight / Transit Dining.", dinnerLocal: "In-Flight / Transit Dining." }
+        let defaultExpensesList = [
+            { id: 1, title: "Suzuki Swift + Toddler Seat (Ebrahim Tours)", category: "Car Rental", totalAmount: 15600, paidAmount: 0, currency: "MUR", date: "Oct 17–24" },
+            { id: 2, title: "Laguna Beach Hotel & Spa (4 Nights)", category: "Hotels", totalAmount: 0, paidAmount: 0, currency: "MUR", date: "Oct 17–21" },
+            { id: 3, title: "OUTRIGGER Mauritius Resort (4 Nights)", category: "Hotels", totalAmount: 0, paidAmount: 0, currency: "MUR", date: "Oct 21–25" }
         ];
 
-        let itineraryDays = [...defaultItineraryDays];
+        let expensesList = [...defaultExpensesList];
 
-        const defaultPlaces = [
-            { id: 1, title: "La Vanille Nature Park", cat: "baby", loc: "South Coast", access: "Paved & Shaded", desc: "Touch and feed giant Aldabra tortoises. Shaded, stroller-friendly paths." },
-            { id: 2, title: "Île aux Cerfs Lagoon", cat: "baby", loc: "East Coast", access: "Boat + Soft Sand", desc: "Shallow, warm turquoise water extending far out. Natural splash pool for toddler." },
-            { id: 3, title: "SSR Botanical Garden", cat: "baby", loc: "Pamplemousses", access: "Flat Gravel Roads", desc: "Giant Amazon water lilies and shady tree avenues. Stroller perfect." },
-            { id: 4, title: "Chamarel 7 Colored Earth", cat: "baby", loc: "South West", access: "Paved Wooden Boardwalks", desc: "7-colored sand dunes, waterfall viewpoint, and giant tortoises." },
-            { id: 5, title: "Odysseo Oceanarium", cat: "baby", loc: "Port Louis", access: "100% AC & Indoor", desc: "Glass underwater tunnel, stingrays, sharks, and touch tanks." },
-            { id: 6, title: "Blue Bay Marine Park", cat: "baby", loc: "South East", access: "Glass-Bottom Boat", desc: "View coral and tropical fish through glass boat floor without swimming." },
-            { id: 7, title: "Grand Bassin (Ganga Talao)", cat: "baby", loc: "Central Plateau", access: "Paved Courtyards", desc: "Sacred crater lake and giant Lord Shiva & Goddess Durga statues." },
-            { id: 8, title: "Le Morne Brabant Hike", cat: "adult", loc: "South West", access: "⚠️ Steep Rock Scramble", desc: "Extreme mountain climb with exposed drop-offs. Skip with toddler." },
-            { id: 9, title: "Tamarin 7 Cascades Hike", cat: "adult", loc: "Central", access: "⚠️ Slippery Ravines", desc: "Deep forest muddy trail and canyoning. Dangerous with kids." }
-        ];
-
-        const defaultRestaurants = [
-            { id: 1, name: "Le Sunshine", cuisine: "Indian & Local", loc: "Trou d'Eau Douce", dist: "~10 mins from Laguna", notes: "Mild khichdi, paneer butter masala, and fresh fruit juices." },
-            { id: 2, name: "Happy Rajah", cuisine: "North Indian", loc: "Grand Baie / Phoenix", dist: "~25 mins drive", notes: "Authentic Indian dishes, mild rotis and dal for toddler." },
-            { id: 3, name: "Edgewater @ Outrigger", cuisine: "Indian / Grill", loc: "Outrigger Resort", dist: "On-site @ Outrigger", notes: "Beachside dining with dedicated Indian chef & kid options." },
-            { id: 4, name: "Namaste Restaurant", cuisine: "North Indian", loc: "Port Louis Waterfront", dist: "~35 mins drive", notes: "Delicious Indian vegetarian options near Caudan." }
-        ];
-
-        function checkUrlSyncHash() {
-            const hash = window.location.hash;
-            if (hash && hash.includes('sync=')) {
-                const blobId = hash.split('sync=')[1].split('&')[0];
-                if (blobId) {
-                    currentBlobId = blobId;
-                    localStorage.setItem('mru_blob_id_' + currentTripId, currentBlobId);
-                    showToast("Connected to Shared Family Cloud!");
-                }
+        // Toast Notification System
+        function showToast(msg) {
+            let toast = document.getElementById('app-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'app-toast';
+                toast.className = 'fixed top-14 left-1/2 -translate-x-1/2 bg-slate-900 text-amber-300 text-xs font-bold px-4 py-2 rounded-2xl shadow-xl z-50 border border-amber-400/40 transition-all duration-200 opacity-0 pointer-events-none';
+                document.body.appendChild(toast);
             }
+            toast.innerText = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => toast.classList.add('opacity-0', 'pointer-events-none'), 2200);
         }
 
-        async function initCloudSync() {
-            checkUrlSyncHash();
-
-            let firebaseCfg = userFirebaseConfig;
-
-            if (firebaseCfg && firebaseCfg.apiKey && !firebaseCfg.apiKey.includes('Dummy')) {
-                try {
-                    app = initializeApp(firebaseCfg);
-                    auth = getAuth(app);
-                    db = getFirestore(app);
-
-                    window.app = app;
-                    window.auth = auth;
-                    window.db = db;
-
-                    const authToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-                    if (authToken) {
-                        await signInWithCustomToken(auth, authToken);
-                    } else if (!auth.currentUser) {
-                        await signInAnonymously(auth);
-                    }
-
-                    user = auth.currentUser;
-                    window.user = user;
-                    activeSyncMode = 'firebase';
-                    
-                    setupFirebaseSnapshot();
-                    updateEngineBadge('Firebase DB Active');
-                    hideDiagnostics();
-                    return;
-                } catch (err) {
-                    console.warn("Firebase authentication error:", err);
-                    showDiagnostics("Firebase Auth Notice", "Anonymous Auth is not enabled in Firebase Console yet. Using CORS Web Sync fallback.");
-                }
-            }
-
-            activeSyncMode = 'cloud';
-            updateEngineBadge('Universal Web Sync');
-            startUniversalCloudPolling();
-        }
-
-        function setupFirebaseSnapshot() {
-            if (!db || !currentTripId) return;
-            if (unsubscribeCloud) unsubscribeCloud();
-
-            setSyncStatus("Syncing...", "teal");
-            
-            const docRef = doc(db, 'trips', currentTripId);
-
-            unsubscribeCloud = onSnapshot(docRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    applyCloudPayload(docSnap.data());
-                    setSyncStatus("Live Synced", "emerald");
-                    hideDiagnostics();
-                } else {
-                    saveStateToCloud();
-                }
-            }, (error) => {
-                console.warn("Firestore snapshot rule error, failing over to Web Sync:", error);
-                showDiagnostics("Firestore Rule Notice", "Firestore database rules are set to blocked. Fallback sync active.");
-                activeSyncMode = 'cloud';
-                startUniversalCloudPolling();
-            });
-        }
-
-        function showDiagnostics(title, msg) {
-            const box = document.getElementById('firebase-diagnostic-box');
-            const dTitle = document.getElementById('diag-title');
-            const dMsg = document.getElementById('diag-msg');
-            if (box && dTitle && dMsg) {
-                dTitle.innerText = title;
-                dMsg.innerText = msg;
-                box.classList.remove('hidden');
-            }
-        }
-
-        function hideDiagnostics() {
-            const box = document.getElementById('firebase-diagnostic-box');
-            if (box) box.classList.add('hidden');
-        }
-
-        function startUniversalCloudPolling() {
-            if (cloudPollTimer) clearInterval(cloudPollTimer);
-            
-            pullFromUniversalCloud();
-            cloudPollTimer = setInterval(pullFromUniversalCloud, 3500);
-
-            window.removeEventListener('focus', pullFromUniversalCloud);
-            window.addEventListener('focus', pullFromUniversalCloud);
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-            document.addEventListener('visibilitychange', handleVisibilityChange);
-        }
-
-        function handleVisibilityChange() {
-            if (document.visibilityState === 'visible') {
-                pullFromUniversalCloud();
-            }
-        }
-
-        async function pullFromUniversalCloud() {
-            if (isCloudUpdating || !currentTripId) return;
-            
-            if (!currentBlobId) {
-                saveStateToCloud();
-                return;
-            }
-
+        async function initCloudEngine() {
+            setSyncStatus("Connecting...", "amber");
             try {
-                const res = await fetch(`${JSON_BLOB_API}/${currentBlobId}`, { cache: 'no-store' });
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                await signInAnonymously(auth);
+                activeSyncMode = 'firebase';
+                setSyncStatus("Live Synced", "emerald");
+
+                const docRef = doc(db, "trips", currentTripId);
+                if (unsubscribeCloud) unsubscribeCloud();
+
+                unsubscribeCloud = onSnapshot(docRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        applyCloudPayload(data);
+                        setSyncStatus("Live Synced", "emerald");
+                    } else {
+                        saveStateToCloud();
+                    }
+                }, (err) => {
+                    initBlobFallback();
+                });
+
+            } catch (err) {
+                initBlobFallback();
+            }
+        }
+
+        function initBlobFallback() {
+            activeSyncMode = 'jsonblob';
+            setSyncStatus("Web Synced", "emerald");
+            if (currentBlobId) fetchBlobData();
+            if (cloudPollTimer) clearInterval(cloudPollTimer);
+            cloudPollTimer = setInterval(fetchBlobData, 4000);
+        }
+
+        async function fetchBlobData() {
+            if (!currentBlobId || isCloudUpdating) return;
+            try {
+                const res = await fetch(`${JSON_BLOB_API}/${currentBlobId}`);
                 if (res.ok) {
                     const data = await res.json();
-                    if (data && data.lastUpdatedTimestamp && data.lastUpdatedTimestamp > lastSyncTimestamp) {
-                        isCloudUpdating = true;
-                        applyCloudPayload(data);
-                        lastSyncTimestamp = data.lastUpdatedTimestamp;
-                        isCloudUpdating = false;
-                        setSyncStatus("Live Synced", "emerald");
-                    }
-                } else if (res.status === 404) {
-                    currentBlobId = '';
-                    localStorage.removeItem('mru_blob_id_' + currentTripId);
-                    saveStateToCloud();
+                    applyCloudPayload(data);
                 }
-            } catch (err) {
-                setSyncStatus("Saved Locally", "slate");
-            }
+            } catch (e) {}
         }
 
         function applyCloudPayload(data) {
@@ -891,6 +904,10 @@
             if (data.checklistData) checklistData = data.checklistData;
             if (data.flightsList) flightsList = data.flightsList;
             if (data.expensesList) expensesList = data.expensesList;
+            if (data.forexRates) {
+                forexRates = data.forexRates;
+                syncForexInputFields();
+            }
 
             renderItinerary();
             renderPlaces();
@@ -904,16 +921,6 @@
             if (isCloudUpdating) return;
             setSyncStatus("Saving...", "amber");
 
-            const nowTs = Date.now();
-            lastSyncTimestamp = nowTs;
-
-            localStorage.setItem('mru_custom_itinerary', JSON.stringify(itineraryDays));
-            localStorage.setItem('mru_custom_places', JSON.stringify(customPlaces));
-            localStorage.setItem('mru_custom_restaurants', JSON.stringify(customRestaurants));
-            localStorage.setItem('mru_checklist_data', JSON.stringify(checklistData));
-            localStorage.setItem('mru_flights', JSON.stringify(flightsList));
-            localStorage.setItem('mru_expenses', JSON.stringify(expensesList));
-
             const payload = {
                 tripId: currentTripId,
                 itineraryDays,
@@ -922,77 +929,60 @@
                 checklistData,
                 flightsList,
                 expensesList,
-                lastUpdated: new Date().toISOString(),
-                lastUpdatedTimestamp: nowTs
+                forexRates,
+                lastUpdated: new Date().toISOString()
             };
+
+            localStorage.setItem('mru_custom_itinerary', JSON.stringify(itineraryDays));
+            localStorage.setItem('mru_custom_places', JSON.stringify(customPlaces));
+            localStorage.setItem('mru_custom_restaurants', JSON.stringify(customRestaurants));
+            localStorage.setItem('mru_checklist_data', JSON.stringify(checklistData));
+            localStorage.setItem('mru_flights', JSON.stringify(flightsList));
+            localStorage.setItem('mru_expenses', JSON.stringify(expensesList));
+            localStorage.setItem('mru_forex_rates', JSON.stringify(forexRates));
 
             if (activeSyncMode === 'firebase' && db && auth.currentUser) {
                 try {
-                    const docRef = doc(db, 'trips', currentTripId);
-                    await setDoc(docRef, payload, { merge: true });
+                    await setDoc(doc(db, "trips", currentTripId), payload);
                     setSyncStatus("Live Synced", "emerald");
                     return;
-                } catch (err) {
-                    console.warn("Firestore write failed, falling back to Web Sync:", err);
-                    activeSyncMode = 'cloud';
-                }
+                } catch(e) {}
             }
 
             try {
-                if (currentBlobId) {
-                    await fetch(`${JSON_BLOB_API}/${currentBlobId}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                } else {
+                if (!currentBlobId) {
                     const res = await fetch(JSON_BLOB_API, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-                    if (res.ok) {
-                        const locHeader = res.headers.get('Location');
-                        if (locHeader) {
-                            currentBlobId = locHeader.substring(locHeader.lastIndexOf('/') + 1);
-                            localStorage.setItem('mru_blob_id_' + currentTripId, currentBlobId);
-                        }
+                    const blobUrl = res.headers.get('Location');
+                    if (blobUrl) {
+                        currentBlobId = blobUrl.split('/').pop();
+                        localStorage.setItem('mru_blob_id_' + currentTripId, currentBlobId);
                     }
+                } else {
+                    await fetch(`${JSON_BLOB_API}/${currentBlobId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
                 }
-                setSyncStatus("Live Synced", "emerald");
-            } catch (err) {
-                setSyncStatus("Saved Locally", "slate");
+                setSyncStatus("Web Synced", "emerald");
+            } catch(e) {
+                setSyncStatus("Saved Local", "amber");
             }
-        }
-
-        function updateEngineBadge(text) {
-            const badge = document.getElementById('active-engine-badge');
-            if (badge) badge.innerText = text;
         }
 
         function setSyncStatus(text, color) {
-            const badgeText = document.getElementById('sync-status-text');
-            const badgeContainer = document.getElementById('sync-status-badge');
-            if (badgeText) badgeText.innerText = text;
-            if (badgeContainer) {
-                if (color === 'emerald') badgeContainer.className = "px-2 py-1 rounded-xl bg-teal-950/80 text-emerald-400 text-[10px] font-bold border border-emerald-500/30 flex items-center gap-1 shadow-xs";
-                else if (color === 'amber') badgeContainer.className = "px-2 py-1 rounded-xl bg-amber-950/80 text-amber-300 text-[10px] font-bold border border-amber-500/30 flex items-center gap-1 shadow-xs";
-                else badgeContainer.className = "px-2 py-1 rounded-xl bg-slate-800 text-slate-300 text-[10px] font-bold border border-slate-700 flex items-center gap-1 shadow-xs";
+            const txtEl = document.getElementById('sync-status-text');
+            const badge = document.getElementById('sync-status-badge');
+            if (txtEl) txtEl.innerText = text;
+            if (badge) {
+                badge.className = `px-2 py-1 rounded-xl text-[10px] font-bold border flex items-center gap-1 shadow-xs ${
+                    color === 'emerald' ? 'bg-teal-950/80 text-emerald-400 border-emerald-500/30' : 'bg-amber-950/80 text-amber-300 border-amber-500/30'
+                }`;
             }
-        }
-
-        function copyWifeShareLink() {
-            const pageUrl = window.location.href.split('#')[0];
-            const syncUrl = `${pageUrl}#sync=${currentBlobId || currentTripId}`;
-            
-            const temp = document.createElement('textarea');
-            temp.value = `Hey! Here is our live Mauritius Trip App link: ${syncUrl}`;
-            document.body.appendChild(temp);
-            temp.select();
-            document.execCommand('copy');
-            document.body.removeChild(temp);
-
-            showToast("WhatsApp Sync Link Copied!");
         }
 
         function loadSavedData() {
@@ -1016,6 +1006,10 @@
 
                 const sExp = localStorage.getItem('mru_expenses');
                 if (sExp) expensesList = JSON.parse(sExp);
+
+                const sRates = localStorage.getItem('mru_forex_rates');
+                if (sRates) forexRates = JSON.parse(sRates);
+                syncForexInputFields();
             } catch(e) {}
 
             renderItinerary();
@@ -1028,19 +1022,24 @@
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById('view-' + tabId).classList.remove('hidden');
+            const target = document.getElementById(`view-${tabId}`);
+            if (target) target.classList.remove('hidden');
 
             document.querySelectorAll('nav button').forEach(btn => {
-                btn.classList.remove('text-teal-700', 'font-bold');
-                btn.classList.add('text-slate-400', 'font-semibold');
+                btn.className = 'btn-touch flex-1 min-w-[52px] py-1 text-slate-400 flex flex-col items-center gap-1 font-semibold';
             });
-
-            const activeBtn = document.getElementById('mob-' + tabId);
-            if (activeBtn) {
-                activeBtn.classList.remove('text-slate-400', 'font-semibold');
-                activeBtn.classList.add('text-teal-700', 'font-bold');
-            }
+            const activeBtn = document.getElementById(`mob-${tabId}`);
+            if (activeBtn) activeBtn.className = 'btn-touch flex-1 min-w-[52px] py-1 text-teal-700 flex flex-col items-center gap-1 font-bold';
+            
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function setItineraryMode(mode) {
+            itineraryMode = mode;
+            document.getElementById('current-mode-label').innerText = mode === 'indian' ? 'Indian Focus' : 'Local Focus';
+            document.getElementById('btn-mode-indian').className = mode === 'indian' ? 'btn-touch px-2.5 py-1 rounded-lg text-[10px] font-extrabold bg-amber-500 text-slate-950 shadow' : 'btn-touch px-2.5 py-1 rounded-lg text-[10px] font-bold text-slate-300';
+            document.getElementById('btn-mode-local').className = mode === 'local' ? 'btn-touch px-2.5 py-1 rounded-lg text-[10px] font-extrabold bg-teal-600 text-white shadow' : 'btn-touch px-2.5 py-1 rounded-lg text-[10px] font-bold text-slate-300';
+            renderItinerary();
         }
 
         function renderItinerary() {
@@ -1051,38 +1050,38 @@
             itineraryDays.forEach(day => {
                 const dinnerText = itineraryMode === 'indian' ? day.dinnerIndian : day.dinnerLocal;
                 const card = document.createElement('div');
-                card.className = "bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs space-y-2.5";
+                card.className = "bg-white rounded-2xl p-3.5 border border-slate-200 shadow-xs space-y-2.5 text-xs animate-fade-in";
                 card.innerHTML = `
                     <div class="flex justify-between items-start border-b border-slate-100 pb-2">
                         <div>
-                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-teal-50 text-teal-800 border border-teal-200">${day.tag}</span>
-                            <h3 class="font-extrabold text-slate-900 text-xs mt-1">${day.title}</h3>
+                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-teal-50 text-teal-800 border border-teal-200 uppercase tracking-wider">${day.locationTag}</span>
+                            <h3 class="font-extrabold text-slate-900 text-xs mt-1">${day.date}</h3>
                         </div>
-                        <button onclick="openEditDayModal(${day.id})" class="btn-touch px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[10px] font-bold flex items-center gap-1">
-                            <i class="fa-solid fa-pen text-[9px]"></i> Edit
+                        <button onclick="openEditDayModal(${day.id})" class="btn-touch text-slate-400 hover:text-teal-700 p-1">
+                            <i class="fa-solid fa-pen-to-square text-xs"></i>
                         </button>
                     </div>
 
-                    <div class="space-y-2 text-xs">
-                        <div class="p-2 rounded-xl bg-amber-50/60 border border-amber-100">
-                            <div class="font-bold text-amber-950 text-[10px] uppercase flex items-center gap-1">
+                    <div class="space-y-2 text-slate-700">
+                        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                            <div class="font-bold text-slate-900 text-[11px] flex items-center gap-1.5 text-teal-800">
                                 <i class="fa-solid fa-sun text-amber-500"></i> Morning: ${day.morningTitle}
                             </div>
-                            <p class="text-slate-600 text-[11px] mt-0.5">${day.morningDesc}</p>
+                            <p class="text-[10px] text-slate-600 mt-1 leading-relaxed">${day.morningDesc}</p>
                         </div>
 
-                        <div class="p-2 rounded-xl bg-sky-50/60 border border-sky-100">
-                            <div class="font-bold text-sky-950 text-[10px] uppercase flex items-center gap-1">
-                                <i class="fa-solid fa-cloud-sun text-sky-500"></i> Afternoon: ${day.afternoonTitle}
+                        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                            <div class="font-bold text-slate-900 text-[11px] flex items-center gap-1.5 text-indigo-900">
+                                <i class="fa-solid fa-cloud-sun text-indigo-500"></i> Afternoon: ${day.afternoonTitle}
                             </div>
-                            <p class="text-slate-600 text-[11px] mt-0.5">${day.afternoonDesc}</p>
+                            <p class="text-[10px] text-slate-600 mt-1 leading-relaxed">${day.afternoonDesc}</p>
                         </div>
 
-                        <div class="p-2 rounded-xl bg-slate-900 text-white">
-                            <div class="font-bold text-amber-400 text-[10px] uppercase flex items-center gap-1">
-                                <i class="fa-solid fa-utensils text-amber-400"></i> Evening Dinner (${itineraryMode === 'indian' ? '🇮🇳 Indian Focus' : '🇲🇺 Local Focus'})
+                        <div class="p-2.5 rounded-xl border ${itineraryMode === 'indian' ? 'bg-amber-50/70 border-amber-200/80' : 'bg-teal-50/70 border-teal-200/80'}">
+                            <div class="font-bold text-[11px] flex items-center gap-1.5 ${itineraryMode === 'indian' ? 'text-amber-950' : 'text-teal-950'}">
+                                <i class="fa-solid fa-utensils ${itineraryMode === 'indian' ? 'text-amber-600' : 'text-teal-600'}"></i> Dinner (${itineraryMode === 'indian' ? '🇮🇳 Indian Focus' : '🇲🇺 Local Focus'})
                             </div>
-                            <p class="text-slate-200 text-[11px] mt-0.5">${dinnerText}</p>
+                            <p class="text-[10px] ${itineraryMode === 'indian' ? 'text-amber-900' : 'text-teal-900'} mt-1 leading-relaxed">${dinnerText}</p>
                         </div>
                     </div>
                 `;
@@ -1090,50 +1089,43 @@
             });
         }
 
-        function setItineraryMode(mode) {
-            itineraryMode = mode;
-            document.getElementById('current-mode-label').innerText = mode === 'indian' ? 'Indian Focus' : 'Local Focus';
-            
-            const btnInd = document.getElementById('btn-mode-indian');
-            const btnLoc = document.getElementById('btn-mode-local');
-            
-            if (mode === 'indian') {
-                btnInd.className = "btn-touch px-2.5 py-1 rounded-lg text-[10px] font-extrabold bg-amber-500 text-slate-950 shadow";
-                btnLoc.className = "btn-touch px-2.5 py-1 rounded-lg text-[10px] font-bold text-slate-300";
-            } else {
-                btnLoc.className = "btn-touch px-2.5 py-1 rounded-lg text-[10px] font-extrabold bg-teal-500 text-slate-950 shadow";
-                btnInd.className = "btn-touch px-2.5 py-1 rounded-lg text-[10px] font-bold text-slate-300";
-            }
-            renderItinerary();
-        }
-
-        function renderPlaces() {
+        function renderPlaces(filterCat = 'all') {
             const container = document.getElementById('places-container');
             if (!container) return;
             container.innerHTML = '';
 
-            customPlaces.forEach(place => {
-                const isBaby = place.cat === 'baby';
+            const items = filterCat === 'all' ? customPlaces : customPlaces.filter(p => p.cat === filterCat);
+
+            items.forEach(place => {
                 const card = document.createElement('div');
-                card.className = `bg-white p-3.5 rounded-2xl border ${isBaby ? 'border-teal-200' : 'border-rose-200'} shadow-xs space-y-1.5`;
+                card.className = `p-3.5 rounded-2xl border shadow-xs text-xs space-y-1.5 ${place.cat === 'baby' ? 'bg-white border-slate-200' : 'bg-rose-50/50 border-rose-200'}`;
                 card.innerHTML = `
                     <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full ${isBaby ? 'bg-teal-50 text-teal-800 border border-teal-200' : 'bg-rose-50 text-rose-800 border border-rose-200'}">
-                                ${isBaby ? '👶 Toddler OK' : '⚠️ Skip / Adult'}
-                            </span>
-                            <h3 class="font-extrabold text-slate-900 text-xs mt-1">${place.title}</h3>
+                        <div class="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
+                            ${place.cat === 'baby' ? '👶' : '⚠️'} ${place.title}
                         </div>
-                        <button onclick="deletePlace(${place.id})" class="text-slate-400 p-1"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                        <span class="text-[9px] font-bold px-2 py-0.5 rounded-full ${place.cat === 'baby' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                            ${place.cat === 'baby' ? 'Toddler OK' : 'Skip / Adult'}
+                        </span>
                     </div>
-                    <p class="text-[11px] text-slate-600">${place.desc}</p>
-                    <div class="flex gap-2 text-[9px] font-semibold text-slate-500 pt-1 border-t border-slate-100">
-                        <span><i class="fa-solid fa-location-dot text-teal-600"></i> ${place.loc}</span>
-                        <span><i class="fa-solid fa-shoe-prints text-amber-600"></i> ${place.access}</span>
+                    <div class="text-[10px] text-slate-500 font-medium">📍 ${place.loc} • Access: ${place.access}</div>
+                    <p class="text-[10px] text-slate-600 leading-relaxed">${place.desc}</p>
+                    <div class="flex justify-end gap-2 pt-1">
+                        <button onclick="editPlace(${place.id})" class="text-teal-700 font-bold text-[10px]"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button onclick="deletePlace(${place.id})" class="text-rose-600 font-bold text-[10px]"><i class="fa-solid fa-trash"></i> Delete</button>
                     </div>
                 `;
                 container.appendChild(card);
             });
+        }
+
+        function filterPlaces(cat) {
+            document.querySelectorAll('#view-places button[id^="filter-"]').forEach(b => {
+                b.className = 'btn-touch px-3 py-1 rounded-xl bg-slate-100 text-slate-700 font-semibold whitespace-nowrap';
+            });
+            const btn = document.getElementById(`filter-${cat}`);
+            if (btn) btn.className = 'btn-touch px-3 py-1 rounded-xl bg-teal-700 text-white font-bold whitespace-nowrap';
+            renderPlaces(cat);
         }
 
         function renderRestaurants() {
@@ -1143,19 +1135,17 @@
 
             customRestaurants.forEach(rest => {
                 const card = document.createElement('div');
-                card.className = "bg-white p-3.5 rounded-2xl border border-amber-200/90 shadow-xs space-y-1.5";
+                card.className = "bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs text-xs space-y-1.5";
                 card.innerHTML = `
                     <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-900 border border-amber-200">${rest.cuisine}</span>
-                            <h3 class="font-extrabold text-slate-900 text-xs mt-1">${rest.name}</h3>
-                        </div>
-                        <button onclick="deleteRestaurant(${rest.id})" class="text-slate-400 p-1"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                        <h4 class="font-extrabold text-slate-900 text-xs text-amber-950">${rest.name}</h4>
+                        <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900">${rest.cuisine}</span>
                     </div>
-                    <p class="text-[11px] text-slate-600">${rest.notes}</p>
-                    <div class="flex gap-3 text-[9px] font-semibold text-slate-500 pt-1 border-t border-slate-100">
-                        <span><i class="fa-solid fa-map-pin text-amber-600"></i> ${rest.loc}</span>
-                        <span><i class="fa-solid fa-route text-teal-600"></i> ${rest.dist}</span>
+                    <div class="text-[10px] text-slate-500 font-medium">📍 ${rest.loc} • ${rest.dist}</div>
+                    <p class="text-[10px] text-slate-600 leading-relaxed">${rest.notes}</p>
+                    <div class="flex justify-end gap-2 pt-1">
+                        <button onclick="editRestaurant(${rest.id})" class="text-teal-700 font-bold text-[10px]"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button onclick="deleteRestaurant(${rest.id})" class="text-rose-600 font-bold text-[10px]"><i class="fa-solid fa-trash"></i> Delete</button>
                     </div>
                 `;
                 container.appendChild(card);
@@ -1167,56 +1157,104 @@
             if (!container) return;
             container.innerHTML = '';
 
-            flightsList.forEach(flight => {
-                const item = document.createElement('div');
-                item.className = "p-2 rounded-lg border border-slate-200 bg-white space-y-1";
-                item.innerHTML = `
-                    <div class="flex justify-between items-center text-[10px] font-bold text-slate-800">
-                        <span>${flight.leg}</span>
-                        <button onclick="deleteFlightLeg(${flight.id})" class="text-rose-600 font-normal"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
-                    <input type="text" value="${flight.details}" onchange="updateFlightDetails(${flight.id}, this.value)" class="w-full p-1.5 text-xs rounded border border-slate-200 bg-slate-50 font-medium">
+            flightsList.forEach(f => {
+                const div = document.createElement('div');
+                div.className = "flex gap-2 items-center bg-white p-2 rounded-lg border border-slate-200";
+                div.innerHTML = `
+                    <input type="text" value="${f.leg}" onchange="updateFlight(${f.id}, 'leg', this.value)" class="w-1/3 p-1 rounded border border-slate-300 font-bold text-[10px] bg-slate-50">
+                    <input type="text" value="${f.details}" onchange="updateFlight(${f.id}, 'details', this.value)" class="flex-1 p-1 rounded border border-slate-300 text-[10px]">
+                    <button onclick="deleteFlightLeg(${f.id})" class="text-rose-600 p-1"><i class="fa-solid fa-trash"></i></button>
                 `;
-                container.appendChild(item);
+                container.appendChild(div);
             });
+        }
+
+        function updateFlight(id, key, val) {
+            const f = flightsList.find(x => x.id === id);
+            if (f) f[key] = val;
+            saveStateToCloud();
+        }
+
+        function addFlightLeg() {
+            flightsList.push({ id: Date.now(), leg: "New Leg", details: "Flight details..." });
+            renderFlightsHub();
+            saveStateToCloud();
+        }
+
+        function deleteFlightLeg(id) {
+            flightsList = flightsList.filter(x => x.id !== id);
+            renderFlightsHub();
+            saveStateToCloud();
         }
 
         function renderChecklists() {
             ['baby', 'meds', 'general'].forEach(cat => {
-                const container = document.getElementById('list-' + cat);
-                const countBadge = document.getElementById('count-' + cat);
+                const container = document.getElementById(`list-${cat}`);
+                const countBadge = document.getElementById(`count-${cat}`);
                 if (!container) return;
                 container.innerHTML = '';
 
                 const items = checklistData[cat] || [];
-                const completedCount = items.filter(i => i.completed).length;
-                if (countBadge) countBadge.innerText = `${completedCount}/${items.length}`;
+                const completed = items.filter(i => i.completed).length;
+                if (countBadge) countBadge.innerText = `${completed}/${items.length}`;
 
                 items.forEach(item => {
                     const row = document.createElement('div');
-                    row.className = `p-2 rounded-xl border flex items-center justify-between gap-2 ${item.completed ? 'bg-slate-50 border-slate-200 text-slate-400 line-through' : 'bg-white border-slate-200 text-slate-800 font-medium'}`;
+                    row.className = `p-2 rounded-xl border flex items-center justify-between gap-2 text-xs transition-all ${item.completed ? 'bg-slate-100/80 text-slate-400 border-slate-200 line-through' : 'bg-white text-slate-800 border-slate-200'}`;
                     row.innerHTML = `
-                        <div onclick="toggleTodo(${item.id}, '${cat}')" class="flex items-center gap-2 flex-1 cursor-pointer">
-                            <input type="checkbox" ${item.completed ? 'checked' : ''} class="rounded text-teal-600 w-4 h-4 pointer-events-none">
-                            <span class="text-xs">${item.text}</span>
+                        <div onclick="toggleChecklistItem('${cat}', ${item.id})" class="flex items-center gap-2 flex-1 cursor-pointer">
+                            <input type="checkbox" ${item.completed ? 'checked' : ''} class="w-4 h-4 rounded text-teal-600 pointer-events-none">
+                            <span class="font-medium text-[11px]">${item.text}</span>
                         </div>
-                        <button onclick="deleteTodoItem(${item.id}, '${cat}')" class="text-slate-300 hover:text-rose-500 p-1"><i class="fa-solid fa-xmark text-xs"></i></button>
+                        <button onclick="deleteChecklistItem('${cat}', ${item.id})" class="text-rose-400 p-1"><i class="fa-solid fa-xmark"></i></button>
                     `;
                     container.appendChild(row);
                 });
             });
         }
 
+        function toggleChecklistItem(cat, id) {
+            const item = (checklistData[cat] || []).find(x => x.id === id);
+            if (item) {
+                item.completed = !item.completed;
+                renderChecklists();
+                saveStateToCloud();
+            }
+        }
+
+        function addChecklistItem() {
+            const text = document.getElementById('new-todo-text').value.trim();
+            const cat = document.getElementById('new-todo-cat').value;
+            if (!text) return;
+
+            if (!checklistData[cat]) checklistData[cat] = [];
+            checklistData[cat].push({ id: Date.now(), text, completed: false });
+            document.getElementById('new-todo-text').value = '';
+            renderChecklists();
+            saveStateToCloud();
+            showToast("Item Added!");
+        }
+
+        function deleteChecklistItem(cat, id) {
+            checklistData[cat] = (checklistData[cat] || []).filter(x => x.id !== id);
+            renderChecklists();
+            saveStateToCloud();
+        }
+
         function renderExpenses() {
             const container = document.getElementById('expenses-container');
+            const summaryGrandTotalInr = document.getElementById('summary-grand-total-inr');
+            const summaryGrandPaidInr = document.getElementById('summary-grand-paid-inr');
+            const summaryGrandDueInr = document.getElementById('summary-grand-due-inr');
             const summaryTotal = document.getElementById('summary-total-cost');
             const summaryPaid = document.getElementById('summary-total-paid');
             const summaryDue = document.getElementById('summary-total-due');
             if (!container) return;
             container.innerHTML = '';
 
-            let totalINR = 0, paidINR = 0, dueINR = 0;
+            let grandTotalINR = 0, grandPaidINR = 0, grandDueINR = 0;
             let totalMUR = 0, paidMUR = 0, dueMUR = 0;
+            let totalINR = 0, paidINR = 0, dueINR = 0;
 
             if (expensesList.length === 0) {
                 container.innerHTML = `<div class="text-slate-400 text-[11px] text-center py-4">No expenses recorded yet. Add your flights, hotels, or car rental!</div>`;
@@ -1225,18 +1263,24 @@
                     const total = Number(exp.totalAmount || exp.amount || 0);
                     const paid = Number(exp.paidAmount !== undefined ? exp.paidAmount : total);
                     const due = Math.max(0, total - paid);
-                    const symbol = exp.currency === 'INR' ? '₹' : (exp.currency === 'MUR' ? '₨' : (exp.currency === 'EUR' ? '€' : '$'));
+                    const currency = exp.currency || 'MUR';
+                    const rate = forexRates[currency] || 1;
+                    
+                    const itemTotalINR = total * rate;
+                    const itemPaidINR = paid * rate;
+                    const itemDueINR = due * rate;
 
-                    if (exp.currency === 'INR') {
-                        totalINR += total;
-                        paidINR += paid;
-                        dueINR += due;
-                    } else if (exp.currency === 'MUR') {
-                        totalMUR += total;
-                        paidMUR += paid;
-                        dueMUR += due;
+                    grandTotalINR += itemTotalINR;
+                    grandPaidINR += itemPaidINR;
+                    grandDueINR += itemDueINR;
+
+                    if (currency === 'MUR') {
+                        totalMUR += total; paidMUR += paid; dueMUR += due;
+                    } else if (currency === 'INR') {
+                        totalINR += total; paidINR += paid; dueINR += due;
                     }
 
+                    const symbol = currency === 'INR' ? '₹' : (currency === 'MUR' ? '₨' : (currency === 'EUR' ? '€' : '$'));
                     const isFullyPaid = due <= 0;
 
                     const card = document.createElement('div');
@@ -1245,7 +1289,7 @@
                         <div class="flex justify-between items-start">
                             <div>
                                 <div class="font-bold text-slate-800 text-xs">${exp.title}</div>
-                                <div class="text-[9px] text-slate-500 font-semibold">${exp.category} • ${exp.date}</div>
+                                <div class="text-[9px] text-slate-500 font-semibold">${exp.category} • ${exp.date || 'Trip Date'}</div>
                             </div>
                             <span class="text-[9px] font-extrabold px-2 py-0.5 rounded-full ${isFullyPaid ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-900 border border-amber-300'}">
                                 ${isFullyPaid ? '✓ Fully Paid' : '⚠️ Balance Owed'}
@@ -1256,14 +1300,17 @@
                             <div>
                                 <div class="text-[8px] text-slate-400 font-semibold uppercase">Total Cost</div>
                                 <div class="font-extrabold text-slate-800">${symbol}${total.toLocaleString()}</div>
+                                ${currency !== 'INR' ? `<div class="text-[8.5px] text-teal-700 font-black">≈ ₹${Math.round(itemTotalINR).toLocaleString()}</div>` : ''}
                             </div>
                             <div>
                                 <div class="text-[8px] text-emerald-600 font-semibold uppercase">Paid</div>
                                 <div class="font-extrabold text-emerald-700">${symbol}${paid.toLocaleString()}</div>
+                                ${currency !== 'INR' ? `<div class="text-[8.5px] text-emerald-600 font-bold">≈ ₹${Math.round(itemPaidINR).toLocaleString()}</div>` : ''}
                             </div>
                             <div>
                                 <div class="text-[8px] ${due > 0 ? 'text-rose-600 font-bold uppercase animate-pulse' : 'text-slate-400 font-semibold uppercase'}">Owed / Due</div>
                                 <div class="font-black ${due > 0 ? 'text-rose-700' : 'text-slate-500'}">${symbol}${due.toLocaleString()}</div>
+                                ${currency !== 'INR' ? `<div class="text-[8.5px] ${due > 0 ? 'text-rose-700 font-black' : 'text-slate-400'}">≈ ₹${Math.round(itemDueINR).toLocaleString()}</div>` : ''}
                             </div>
                         </div>
 
@@ -1280,25 +1327,54 @@
                 });
             }
 
-            if (summaryTotal) summaryTotal.innerText = `₹${totalINR.toLocaleString()} | ₨${totalMUR.toLocaleString()}`;
-            if (summaryPaid) summaryPaid.innerText = `₹${paidINR.toLocaleString()} | ₨${paidMUR.toLocaleString()}`;
-            if (summaryDue) summaryDue.innerText = `₹${dueINR.toLocaleString()} | ₨${dueMUR.toLocaleString()}`;
+            if (summaryGrandTotalInr) summaryGrandTotalInr.innerText = `₹${Math.round(grandTotalINR).toLocaleString()}`;
+            if (summaryGrandPaidInr) summaryGrandPaidInr.innerText = `₹${Math.round(grandPaidINR).toLocaleString()}`;
+            if (summaryGrandDueInr) summaryGrandDueInr.innerText = `₹${Math.round(grandDueINR).toLocaleString()}`;
+
+            if (summaryTotal) summaryTotal.innerText = `₨${totalMUR.toLocaleString()} | ₹${totalINR.toLocaleString()}`;
+            if (summaryPaid) summaryPaid.innerText = `₨${paidMUR.toLocaleString()} | ₹${paidINR.toLocaleString()}`;
+            if (summaryDue) summaryDue.innerText = `₨${dueMUR.toLocaleString()} | ₹${dueINR.toLocaleString()}`;
+        }
+
+        function toggleForexSettings() {
+            document.getElementById('forex-rates-panel').classList.toggle('hidden');
+        }
+
+        function syncForexInputFields() {
+            const murIn = document.getElementById('rate-mur');
+            const usdIn = document.getElementById('rate-usd');
+            const eurIn = document.getElementById('rate-eur');
+            if (murIn) murIn.value = forexRates.MUR || 1.83;
+            if (usdIn) usdIn.value = forexRates.USD || 84.00;
+            if (eurIn) eurIn.value = forexRates.EUR || 91.00;
+        }
+
+        function updateForexRates() {
+            const murVal = Number(document.getElementById('rate-mur').value);
+            const usdVal = Number(document.getElementById('rate-usd').value);
+            const eurVal = Number(document.getElementById('rate-eur').value);
+
+            if (murVal) forexRates.MUR = murVal;
+            if (usdVal) forexRates.USD = usdVal;
+            if (eurVal) forexRates.EUR = eurVal;
+
+            renderExpenses();
+            saveStateToCloud();
+            showToast("Exchange Rates Updated!");
         }
 
         function addExpense() {
             const title = document.getElementById('exp-title').value.trim();
-            const totalInput = document.getElementById('exp-total-amount').value;
-            const paidInput = document.getElementById('exp-paid-amount').value;
+            const totalAmount = Number(document.getElementById('exp-total-amount').value);
+            const paidVal = document.getElementById('exp-paid-amount').value;
+            const paidAmount = paidVal !== '' ? Number(paidVal) : totalAmount;
             const currency = document.getElementById('exp-currency').value;
             const category = document.getElementById('exp-category').value;
 
-            if (!title || !totalInput) {
-                showToast('Please enter description & total cost', 'warning');
+            if (!title || isNaN(totalAmount)) {
+                showToast("Enter title & total cost");
                 return;
             }
-
-            const totalAmount = Number(totalInput);
-            const paidAmount = paidInput !== '' ? Number(paidInput) : totalAmount;
 
             expensesList.push({
                 id: Date.now(),
@@ -1316,124 +1392,50 @@
 
             renderExpenses();
             saveStateToCloud();
-            showToast('Expense & Payment Recorded!');
+            showToast("Expense Saved!");
         }
 
         function updatePaymentPrompt(id) {
-            const exp = expensesList.find(e => e.id === id);
+            const exp = expensesList.find(x => x.id === id);
             if (!exp) return;
+            const currentTotal = exp.totalAmount || exp.amount || 0;
+            const currentPaid = exp.paidAmount !== undefined ? exp.paidAmount : currentTotal;
 
-            const currentPaid = exp.paidAmount !== undefined ? exp.paidAmount : (exp.totalAmount || exp.amount || 0);
-            const total = exp.totalAmount || exp.amount || 0;
-            const symbol = exp.currency === 'INR' ? '₹' : (exp.currency === 'MUR' ? '₨' : '$');
-
-            const newVal = prompt(`Update amount paid for "${exp.title}" (Total Cost: ${symbol}${total.toLocaleString()}):`, currentPaid);
-            if (newVal !== null && !isNaN(newVal) && newVal.trim() !== '') {
-                exp.paidAmount = Math.min(total, Math.max(0, Number(newVal)));
+            const newPaid = prompt(`Update amount paid so far for "${exp.title}" (${exp.currency}):`, currentPaid);
+            if (newPaid !== null && !isNaN(Number(newPaid))) {
+                exp.paidAmount = Number(newPaid);
                 renderExpenses();
                 saveStateToCloud();
-                showToast('Payment Status Updated!');
+                showToast("Payment Updated!");
             }
-        }
-
-        function toggleTodo(id, cat) {
-            const item = checklistData[cat].find(i => i.id === id);
-            if (item) {
-                item.completed = !item.completed;
-                renderChecklists();
-                saveStateToCloud();
-            }
-        }
-
-        function addTodoItem() {
-            const cat = document.getElementById('todo-category-select').value;
-            const input = document.getElementById('input-todo-item');
-            const text = input.value.trim();
-            if (!text) return;
-
-            checklistData[cat].push({
-                id: Date.now(),
-                text,
-                completed: false
-            });
-            input.value = '';
-            renderChecklists();
-            saveStateToCloud();
-            showToast('Item Added!');
-        }
-
-        function deleteTodoItem(id, cat) {
-            checklistData[cat] = checklistData[cat].filter(i => i.id !== id);
-            renderChecklists();
-            saveStateToCloud();
-        }
-
-        function resetChecklists() {
-            Object.keys(checklistData).forEach(cat => {
-                checklistData[cat].forEach(i => i.completed = false);
-            });
-            renderChecklists();
-            saveStateToCloud();
-            showToast('All items unchecked!');
         }
 
         function deleteExpense(id) {
-            expensesList = expensesList.filter(e => e.id !== id);
+            expensesList = expensesList.filter(x => x.id !== id);
             renderExpenses();
             saveStateToCloud();
         }
 
         function clearAllExpenses() {
-            if (expensesList.length === 0) return;
-            expensesList = [];
-            renderExpenses();
-            saveStateToCloud();
-            showToast('Expenses Cleared');
-        }
-
-        function addFlightLeg() {
-            flightsList.push({
-                id: Date.now(),
-                leg: `Leg ${flightsList.length + 1}`,
-                details: "Flight No: ____ • From ____ to ____"
-            });
-            renderFlightsHub();
-            saveStateToCloud();
-        }
-
-        function updateFlightDetails(id, val) {
-            const flight = flightsList.find(f => f.id === id);
-            if (flight) {
-                flight.details = val;
+            if (confirm("Clear all expenses?")) {
+                expensesList = [];
+                renderExpenses();
                 saveStateToCloud();
             }
         }
 
-        function deleteFlightLeg(id) {
-            flightsList = flightsList.filter(f => f.id !== id);
-            renderFlightsHub();
-            saveStateToCloud();
-        }
-
-        function saveHubData() {
-            saveStateToCloud();
-            showToast('Hub Saved!');
-        }
-
         function openEditDayModal(id) {
-            const day = itineraryDays.find(d => d.id === id);
+            const day = itineraryDays.find(x => x.id === id);
             if (!day) return;
-
             document.getElementById('edit-day-id').value = day.id;
-            document.getElementById('edit-day-title').value = day.title;
-            document.getElementById('edit-day-tag').value = day.tag;
+            document.getElementById('edit-day-title').value = day.date;
+            document.getElementById('edit-day-tag').value = day.locationTag;
             document.getElementById('edit-day-morning-title').value = day.morningTitle;
             document.getElementById('edit-day-morning-desc').value = day.morningDesc;
             document.getElementById('edit-day-afternoon-title').value = day.afternoonTitle;
             document.getElementById('edit-day-afternoon-desc').value = day.afternoonDesc;
             document.getElementById('edit-day-dinner-indian').value = day.dinnerIndian;
             document.getElementById('edit-day-dinner-local').value = day.dinnerLocal;
-
             document.getElementById('modal-edit-day').classList.remove('hidden');
         }
 
@@ -1443,56 +1445,56 @@
 
         function saveDayEdit() {
             const id = Number(document.getElementById('edit-day-id').value);
-            const day = itineraryDays.find(d => d.id === id);
-            if (!day) return;
-
-            day.title = document.getElementById('edit-day-title').value;
-            day.tag = document.getElementById('edit-day-tag').value;
-            day.morningTitle = document.getElementById('edit-day-morning-title').value;
-            day.morningDesc = document.getElementById('edit-day-morning-desc').value;
-            day.afternoonTitle = document.getElementById('edit-day-afternoon-title').value;
-            day.afternoonDesc = document.getElementById('edit-day-afternoon-desc').value;
-            day.dinnerIndian = document.getElementById('edit-day-dinner-indian').value;
-            day.dinnerLocal = document.getElementById('edit-day-dinner-local').value;
-
-            closeEditDayModal();
-            renderItinerary();
-            saveStateToCloud();
-            showToast('Day Updated!');
-        }
-
-        function deleteDayFromModal() {
-            const id = Number(document.getElementById('edit-day-id').value);
-            itineraryDays = itineraryDays.filter(d => d.id !== id);
-            closeEditDayModal();
-            renderItinerary();
-            saveStateToCloud();
-            showToast('Day Deleted');
+            const day = itineraryDays.find(x => x.id === id);
+            if (day) {
+                day.date = document.getElementById('edit-day-title').value;
+                day.locationTag = document.getElementById('edit-day-tag').value;
+                day.morningTitle = document.getElementById('edit-day-morning-title').value;
+                day.morningDesc = document.getElementById('edit-day-morning-desc').value;
+                day.afternoonTitle = document.getElementById('edit-day-afternoon-title').value;
+                day.afternoonDesc = document.getElementById('edit-day-afternoon-desc').value;
+                day.dinnerIndian = document.getElementById('edit-day-dinner-indian').value;
+                day.dinnerLocal = document.getElementById('edit-day-dinner-local').value;
+                renderItinerary();
+                saveStateToCloud();
+                closeEditDayModal();
+                showToast("Itinerary Updated!");
+            }
         }
 
         function addCustomDay() {
             const newId = Date.now();
             itineraryDays.push({
                 id: newId,
-                title: `Day ${itineraryDays.length + 1}: Custom Day Plan`,
-                tag: "Custom Tag",
+                date: `Day ${itineraryDays.length + 1} • New Date`,
+                locationTag: "Explore Mauritius",
                 morningTitle: "Morning Activity",
-                morningDesc: "Enter morning details...",
+                morningDesc: "Add morning details...",
                 afternoonTitle: "Afternoon Activity",
-                afternoonDesc: "Enter afternoon details...",
-                dinnerIndian: "Indian dining idea...",
-                dinnerLocal: "Local dining idea..."
+                afternoonDesc: "Add afternoon details...",
+                dinnerIndian: "Indian dining spot...",
+                dinnerLocal: "Local dining spot..."
             });
             renderItinerary();
             saveStateToCloud();
             openEditDayModal(newId);
         }
 
-        function resetItineraryToDefault() {
-            itineraryDays = [...defaultItineraryDays];
+        function deleteDayFromModal() {
+            const id = Number(document.getElementById('edit-day-id').value);
+            itineraryDays = itineraryDays.filter(x => x.id !== id);
             renderItinerary();
             saveStateToCloud();
-            showToast('Itinerary Reset!');
+            closeEditDayModal();
+        }
+
+        function resetItineraryToDefault() {
+            if (confirm("Reset itinerary to original schedule?")) {
+                itineraryDays = [...defaultItineraryDays];
+                renderItinerary();
+                saveStateToCloud();
+                showToast("Itinerary Reset!");
+            }
         }
 
         function toggleAddPlaceForm() {
@@ -1500,64 +1502,24 @@
         }
 
         function saveCustomPlace() {
-            const title = document.getElementById('new-place-title').value.trim();
+            const title = document.getElementById('new-place-title').value;
+            const cat = document.getElementById('new-place-cat').value;
+            const loc = document.getElementById('new-place-loc').value || "Mauritius";
+            const access = document.getElementById('new-place-access').value || "General Access";
+            const desc = document.getElementById('new-place-desc').value || "";
+
             if (!title) return;
-
-            customPlaces.push({
-                id: Date.now(),
-                title,
-                cat: document.getElementById('new-place-cat').value,
-                loc: document.getElementById('new-place-loc').value || 'Mauritius',
-                access: document.getElementById('new-place-access').value || 'Standard Access',
-                desc: document.getElementById('new-place-desc').value || ''
-            });
-
+            customPlaces.push({ id: Date.now(), title, cat, loc, access, desc });
             toggleAddPlaceForm();
             renderPlaces();
             saveStateToCloud();
-            showToast('Place Saved!');
+            showToast("Place Saved!");
         }
 
         function deletePlace(id) {
-            customPlaces = customPlaces.filter(p => p.id !== id);
+            customPlaces = customPlaces.filter(x => x.id !== id);
             renderPlaces();
             saveStateToCloud();
-        }
-
-        function filterPlaces(cat) {
-            const allBtns = ['all', 'baby', 'adult'];
-            allBtns.forEach(c => {
-                const btn = document.getElementById('filter-' + c);
-                if (btn) {
-                    if (c === cat) btn.className = "btn-touch px-3 py-1 rounded-xl bg-teal-700 text-white font-bold whitespace-nowrap";
-                    else btn.className = "btn-touch px-3 py-1 rounded-xl bg-slate-100 text-slate-700 font-semibold whitespace-nowrap";
-                }
-            });
-
-            if (cat === 'all') renderPlaces();
-            else {
-                const filtered = customPlaces.filter(p => p.cat === cat);
-                const container = document.getElementById('places-container');
-                container.innerHTML = '';
-                filtered.forEach(place => {
-                    const isBaby = place.cat === 'baby';
-                    const card = document.createElement('div');
-                    card.className = `bg-white p-3.5 rounded-2xl border ${isBaby ? 'border-teal-200' : 'border-rose-200'} shadow-xs space-y-1.5`;
-                    card.innerHTML = `
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <span class="text-[9px] font-bold px-2 py-0.5 rounded-full ${isBaby ? 'bg-teal-50 text-teal-800 border border-teal-200' : 'bg-rose-50 text-rose-800 border border-rose-200'}">
-                                    ${isBaby ? '👶 Toddler OK' : '⚠️ Skip / Adult'}
-                                </span>
-                                <h3 class="font-extrabold text-slate-900 text-xs mt-1">${place.title}</h3>
-                            </div>
-                            <button onclick="deletePlace(${place.id})" class="text-slate-400 p-1"><i class="fa-solid fa-trash-can text-xs"></i></button>
-                        </div>
-                        <p class="text-[11px] text-slate-600">${place.desc}</p>
-                    `;
-                    container.appendChild(card);
-                });
-            }
         }
 
         function toggleAddRestaurantForm() {
@@ -1565,32 +1527,27 @@
         }
 
         function saveCustomRestaurant() {
-            const name = document.getElementById('new-rest-name').value.trim();
+            const name = document.getElementById('new-rest-name').value;
+            const cuisine = document.getElementById('new-rest-cuisine').value || "Cuisine";
+            const loc = document.getElementById('new-rest-loc').value || "Mauritius";
+            const dist = document.getElementById('new-rest-dist').value || "Nearby";
+            const notes = document.getElementById('new-rest-notes').value || "";
+
             if (!name) return;
-
-            customRestaurants.push({
-                id: Date.now(),
-                name,
-                cuisine: document.getElementById('new-rest-cuisine').value || 'Indian / Local',
-                loc: document.getElementById('new-rest-loc').value || 'Mauritius',
-                dist: document.getElementById('new-rest-dist').value || 'Drive distance',
-                notes: document.getElementById('new-rest-notes').value || ''
-            });
-
+            customRestaurants.push({ id: Date.now(), name, cuisine, loc, dist, notes });
             toggleAddRestaurantForm();
             renderRestaurants();
             saveStateToCloud();
-            showToast('Restaurant Added!');
+            showToast("Restaurant Saved!");
         }
 
         function deleteRestaurant(id) {
-            customRestaurants = customRestaurants.filter(r => r.id !== id);
+            customRestaurants = customRestaurants.filter(x => x.id !== id);
             renderRestaurants();
             saveStateToCloud();
         }
 
         function openSyncModal() {
-            document.getElementById('shared-trip-id-input').value = currentTripId;
             document.getElementById('modal-sync').classList.remove('hidden');
         }
 
@@ -1599,27 +1556,37 @@
         }
 
         function changeTripId() {
-            const inputVal = document.getElementById('shared-trip-id-input').value.trim();
-            if (!inputVal) return;
-            currentTripId = inputVal;
-            localStorage.setItem('mru_trip_id', currentTripId);
-            currentBlobId = localStorage.getItem('mru_blob_id_' + currentTripId) || '';
-            initCloudSync();
-            closeSyncModal();
-            showToast(`Connected to Trip Code: ${currentTripId}`);
+            const input = document.getElementById('shared-trip-id-input').value.trim();
+            if (input) {
+                currentTripId = input;
+                localStorage.setItem('mru_trip_id', currentTripId);
+                initCloudEngine();
+                showToast("Connected to: " + currentTripId);
+            }
+        }
+
+        function copyWifeShareLink() {
+            const baseUrl = window.location.href.split('#')[0];
+            const shareUrl = `${baseUrl}#trip=${currentTripId}`;
+            
+            const temp = document.createElement('textarea');
+            temp.value = shareUrl;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+
+            showToast("WhatsApp Link Copied!");
+        }
+
+        function forceManualCloudSync() {
+            saveStateToCloud();
+            showToast("Cloud Sync Forced!");
         }
 
         function copySyncData() {
-            const fullState = {
-                tripId: currentTripId,
-                itineraryDays,
-                customPlaces,
-                customRestaurants,
-                checklistData,
-                flightsList,
-                expensesList
-            };
-            const json = JSON.stringify(fullState, null, 2);
+            const data = { itineraryDays, customPlaces, customRestaurants, checklistData, flightsList, expensesList, forexRates };
+            const json = JSON.stringify(data, null, 2);
             
             const temp = document.createElement('textarea');
             temp.value = json;
@@ -1631,95 +1598,48 @@
             showToast("Backup Code Copied!");
         }
 
-        function importSyncDataPrompt() {
-            const text = document.getElementById('sync-data-box').value.trim();
-            if (!text) return;
-            try {
-                const parsed = JSON.parse(text);
-                applyCloudPayload(parsed);
-                saveStateToCloud();
-                closeSyncModal();
-                showToast("Backup Data Imported!");
-            } catch (err) {
-                showToast("Invalid JSON text format", "warning");
-            }
-        }
-
-        function forceManualCloudSync() {
-            saveStateToCloud();
-            pullFromUniversalCloud();
-            showToast("⚡ Trip Data Live Synced!");
-        }
-
-        function saveCustomFirebaseConfig() {
-            const val = document.getElementById('sync-data-box').value.trim();
-            if (!val) return;
-            try {
-                const parsed = JSON.parse(val);
-                if (parsed.apiKey) {
-                    localStorage.setItem('mru_custom_firebase_cfg', JSON.stringify(parsed));
-                    showToast('Firebase Saved! Re-initializing...');
-                    initCloudSync();
-                    return;
-                }
-            } catch(e) {}
-            showToast('Invalid Firebase object', 'warning');
-        }
-
-        function showToast(msg, type = 'info') {
-            const existing = document.getElementById('app-toast');
-            if (existing) existing.remove();
-
-            const toast = document.createElement('div');
-            toast.id = 'app-toast';
-            toast.className = `fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-2xl text-xs font-bold text-white shadow-xl animate-bounce ${type === 'warning' ? 'bg-amber-600' : 'bg-slate-900'}`;
-            toast.innerText = msg;
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                if (toast) toast.remove();
-            }, 2500);
-        }
-
         window.switchTab = switchTab;
         window.setItineraryMode = setItineraryMode;
+        window.addCustomDay = addCustomDay;
+        window.resetItineraryToDefault = resetItineraryToDefault;
         window.openEditDayModal = openEditDayModal;
         window.closeEditDayModal = closeEditDayModal;
         window.saveDayEdit = saveDayEdit;
         window.deleteDayFromModal = deleteDayFromModal;
-        window.addCustomDay = addCustomDay;
-        window.resetItineraryToDefault = resetItineraryToDefault;
         window.toggleAddPlaceForm = toggleAddPlaceForm;
+        window.filterPlaces = filterPlaces;
         window.saveCustomPlace = saveCustomPlace;
         window.deletePlace = deletePlace;
-        window.filterPlaces = filterPlaces;
         window.toggleAddRestaurantForm = toggleAddRestaurantForm;
         window.saveCustomRestaurant = saveCustomRestaurant;
         window.deleteRestaurant = deleteRestaurant;
         window.addFlightLeg = addFlightLeg;
-        window.updateFlightDetails = updateFlightDetails;
         window.deleteFlightLeg = deleteFlightLeg;
-        window.saveHubData = saveHubData;
-        window.toggleTodo = toggleTodo;
-        window.addTodoItem = addTodoItem;
-        window.deleteTodoItem = deleteTodoItem;
-        window.resetChecklists = resetChecklists;
+        window.updateFlight = updateFlight;
+        window.addChecklistItem = addChecklistItem;
+        window.toggleChecklistItem = toggleChecklistItem;
+        window.deleteChecklistItem = deleteChecklistItem;
+        window.toggleForexSettings = toggleForexSettings;
+        window.updateForexRates = updateForexRates;
         window.addExpense = addExpense;
+        window.updatePaymentPrompt = updatePaymentPrompt;
         window.deleteExpense = deleteExpense;
         window.clearAllExpenses = clearAllExpenses;
-        window.updatePaymentPrompt = updatePaymentPrompt;
         window.openSyncModal = openSyncModal;
         window.closeSyncModal = closeSyncModal;
         window.changeTripId = changeTripId;
-        window.copySyncData = copySyncData;
-        window.importSyncDataPrompt = importSyncDataPrompt;
-        window.forceManualCloudSync = forceManualCloudSync;
-        window.saveCustomFirebaseConfig = saveCustomFirebaseConfig;
         window.copyWifeShareLink = copyWifeShareLink;
+        window.forceManualCloudSync = forceManualCloudSync;
+        window.copySyncData = copySyncData;
 
         window.onload = function() {
+            if (window.location.hash.includes('trip=')) {
+                const match = window.location.hash.match(/trip=([^&]+)/);
+                if (match) currentTripId = match[1];
+            }
+
             loadSavedData();
-            initCloudSync();
+            initCloudEngine();
         };
     </script>
 </body>
